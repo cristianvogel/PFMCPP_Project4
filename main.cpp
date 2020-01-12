@@ -112,7 +112,7 @@ int IntType::multiply (int x, int y)
 
 int IntType::divide (int x, int y) 
 { 
-    return (x/y); 
+    return (x/y); FIXME try dividing ints by 0...
 }
 
 #include <iostream>
@@ -121,6 +121,8 @@ int main()
     FloatType ft;
     DoubleType dt;
     IntType it;
+
+	auto explode = it.divide(1, 0);
 
     std::cout << "FloatType add result=" << (ft.add(2.0f, 2.0f)) << std::endl;
     std::cout << "FloatType subtract result=" << (ft.subtract(2.0f, 2.0f)) << std::endl;
