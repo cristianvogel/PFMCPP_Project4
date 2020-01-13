@@ -31,7 +31,7 @@ NAME YOUR BRANCH "PART 1"
  Wait for my code review.
  */
 #include <math.h> // I needed to do an ABS function...
-
+#include <iostream> // to print a divide-by-zero console message
 struct FloatType
 {
     float add (float, float);
@@ -57,8 +57,12 @@ float FloatType::multiply (float x, float y)
 
 float FloatType::divide (float x, float y) 
 { 
-    if (abs(y) > 0) return (x/y); FIXME: it's perfectly fine to divide floats by 0.  add a std::cout warning though
-    else        return (0); //some kind of divide by zero catch
+    if (abs(y) > 0) return (x/y);    
+    else 
+    {
+        std::cout << "Divide-by-zero warning  " << std::endl;
+        return (x/y);      
+    }
 }
 
 struct DoubleType
@@ -86,8 +90,13 @@ double DoubleType::multiply (double x, double y)
 
 double DoubleType::divide (double x, double y) 
 { 
-    if (abs(y) > 0) return (x/y);  FIXME: it's perfectly fine to divide floats by 0.  add a std::cout warning though
-    else            return (0); //some kind of divide by zero catch
+    if (abs(y) > 0) return (x/y);    
+    else 
+    {
+        std::cout << "Divide-by-zero warning  " << std::endl;
+        return (x/y);      
+    }
+     
 }
 
 struct IntType
@@ -115,8 +124,13 @@ int IntType::multiply (int x, int y)
 
 int IntType::divide (int x, int y) 
 { 
-    if (y != 0) return (x/y); FIXME add a warning to the user for int divide-by-zero
-    else        return (0); //some kind of divide by zero catch
+    if (y != 0) return (x/y);
+
+    else 
+    {
+        std::cout << "Cannot Divide Int by Zero! " << std::endl;
+        return 0;
+    }
 }
 
 #include <iostream>
@@ -130,17 +144,17 @@ int main()
     std::cout << "FloatType add result=" << (ft.add(2.0f, 2.0f)) << std::endl;
     std::cout << "FloatType subtract result=" << (ft.subtract(2.0f, 2.0f)) << std::endl;
     std::cout << "FloatType multiply result=" << (ft.multiply(2.0f, 2.0f)) << std::endl;
-    std::cout << "FloatType divide result=" << (ft.divide(2.0f, 2.0f)) << std::endl << std::endl;
+    std::cout << "FloatType divide result=" << (ft.divide(2.0f, 0.0f)) << std::endl << std::endl;
 
     std::cout << "DoubleType add result=" << (dt.add(2.0, 2.0)) << std::endl;
     std::cout << "DoubleType subtract result=" << (dt.subtract(2.0, 2.0)) << std::endl;
     std::cout << "DoubleType multiply result=" << (dt.multiply(2.0, 2.0)) << std::endl;
-    std::cout << "DoubleType divide result=" << (dt.divide(2.0, 2.0)) << std::endl << std::endl;
+    std::cout << "DoubleType divide result=" << (dt.divide(2.0, 0)) << std::endl << std::endl;
 
     std::cout << "IntType add result=" << (it.add(2, 2)) << std::endl;
     std::cout << "IntType subtract result=" << (it.subtract(2, 2)) << std::endl;
     std::cout << "IntType multiply result=" << (it.multiply(2, 2)) << std::endl;
-    std::cout << "IntType divide result=" << (it.divide(2, 2 )) << std::endl << std::endl;
+    std::cout << "IntType divide result=" << (it.divide(2, 0 )) << std::endl << std::endl;
 
     std::cout << "good to go!" << std::endl;
 }
