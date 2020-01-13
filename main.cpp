@@ -57,7 +57,7 @@ float FloatType::multiply (float x, float y)
 
 float FloatType::divide (float x, float y) 
 { 
-    if (abs(y) > 0) return (x/y); 
+    if (abs(y) > 0) return (x/y); FIXME: it's perfectly fine to divide floats by 0.  add a std::cout warning though
     else        return (0); //some kind of divide by zero catch
 }
 
@@ -86,7 +86,7 @@ double DoubleType::multiply (double x, double y)
 
 double DoubleType::divide (double x, double y) 
 { 
-    if (abs(y) > 0) return (x/y); 
+    if (abs(y) > 0) return (x/y);  FIXME: it's perfectly fine to divide floats by 0.  add a std::cout warning though
     else            return (0); //some kind of divide by zero catch
 }
 
@@ -115,7 +115,7 @@ int IntType::multiply (int x, int y)
 
 int IntType::divide (int x, int y) 
 { 
-    if (y != 0) return (x/y); 
+    if (y != 0) return (x/y); FIXME add a warning to the user for int divide-by-zero
     else        return (0); //some kind of divide by zero catch
 }
 
