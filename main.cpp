@@ -30,6 +30,7 @@ NAME YOUR BRANCH "PART 1"
  
  Wait for my code review.
  */
+#include <math.h> // I needed to do an ABS function...
 
 struct FloatType
 {
@@ -56,7 +57,8 @@ float FloatType::multiply (float x, float y)
 
 float FloatType::divide (float x, float y) 
 { 
-    return (x/y); 
+    if (abs(y) > 0) return (x/y); 
+    else        return (0); //some kind of divide by zero catch
 }
 
 struct DoubleType
@@ -84,7 +86,8 @@ double DoubleType::multiply (double x, double y)
 
 double DoubleType::divide (double x, double y) 
 { 
-    return (x/y); 
+    if (abs(y) > 0) return (x/y); 
+    else            return (0); //some kind of divide by zero catch
 }
 
 struct IntType
@@ -112,17 +115,17 @@ int IntType::multiply (int x, int y)
 
 int IntType::divide (int x, int y) 
 { 
-    return (x/y); FIXME try dividing ints by 0...
+    if (y != 0) return (x/y); 
+    else        return (0); //some kind of divide by zero catch
 }
 
 #include <iostream>
+
 int main()
 {   
     FloatType ft;
     DoubleType dt;
     IntType it;
-
-	auto explode = it.divide(1, 0);
 
     std::cout << "FloatType add result=" << (ft.add(2.0f, 2.0f)) << std::endl;
     std::cout << "FloatType subtract result=" << (ft.subtract(2.0f, 2.0f)) << std::endl;
@@ -134,10 +137,10 @@ int main()
     std::cout << "DoubleType multiply result=" << (dt.multiply(2.0, 2.0)) << std::endl;
     std::cout << "DoubleType divide result=" << (dt.divide(2.0, 2.0)) << std::endl << std::endl;
 
-    std::cout << "IntType add result=" << (it.add(2.0, 2.0)) << std::endl;
-    std::cout << "IntType subtract result=" << (it.subtract(2.0, 2.0)) << std::endl;
-    std::cout << "IntType multiply result=" << (it.multiply(2.0, 2.0)) << std::endl;
-    std::cout << "IntType divide result=" << (it.divide(2.0, 2.0)) << std::endl << std::endl;
+    std::cout << "IntType add result=" << (it.add(2, 2)) << std::endl;
+    std::cout << "IntType subtract result=" << (it.subtract(2, 2)) << std::endl;
+    std::cout << "IntType multiply result=" << (it.multiply(2, 2)) << std::endl;
+    std::cout << "IntType divide result=" << (it.divide(2, 2 )) << std::endl << std::endl;
 
     std::cout << "good to go!" << std::endl;
 }
