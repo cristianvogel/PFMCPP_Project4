@@ -32,6 +32,7 @@ NAME YOUR BRANCH "PART 1"
  */
 #include <math.h> // I needed to do an ABS function...
 #include <iostream> // to print a divide-by-zero console message
+
 struct FloatType
 {
     float add (float, float);
@@ -58,11 +59,9 @@ float FloatType::multiply (float x, float y)
 float FloatType::divide (float x, float y) 
 { 
     if (abs(y) > 0) return (x/y);    
-    else 
-    {
-        std::cout << "Divide-by-zero warning  " << std::endl;
-        return (x/y);      
-    }
+    
+    std::cout << "Divide-by-zero warning  " << std::endl;
+    return (x/y);      
 }
 
 struct DoubleType
@@ -91,12 +90,9 @@ double DoubleType::multiply (double x, double y)
 double DoubleType::divide (double x, double y) 
 { 
     if (abs(y) > 0) return (x/y);    
-    else 
-    {
-        std::cout << "Divide-by-zero warning  " << std::endl;
-        return (x/y);      
-    }
-     
+    
+    std::cout << "Divide-by-zero warning  " << std::endl;
+    return (x/y);      
 }
 
 struct IntType
@@ -125,12 +121,9 @@ int IntType::multiply (int x, int y)
 int IntType::divide (int x, int y) 
 { 
     if (y != 0) return (x/y);
-
-    else 
-    {
-        std::cout << "Cannot Divide Int by Zero! " << std::endl;
-        return 0;
-    }
+    
+    std::cout << "Cannot Divide Int by Zero! " << std::endl;
+    return 0;
 }
 
 #include <iostream>
