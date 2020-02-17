@@ -20,7 +20,10 @@ struct HeapA
 {
     A* pointerToA = nullptr;
     
-    HeapA( A* ptrToA ) : pointerToA (ptrToA) {}
+    HeapA() {
+        pointerToA = new A();
+    }
+    
     ~HeapA()
     {
         delete pointerToA;
@@ -71,13 +74,22 @@ struct HeapA
 
 struct FloatType
 {
-    float* pointerToFloat = nullptr;
+    float* pointerToFloatValue = nullptr;
 
-    FloatType( float* ptr ) : pointerToFloat ( ptr ) {}
+    // default constructor assigns heap primitive if no value sent in
+    FloatType() {
+        pointerToFloatValue = new float();
+     } 
+
+    FloatType(float floatIn )
+    {
+        pointerToFloatValue = new float( floatIn );
+    }
+    
     ~FloatType()
     {
-        delete pointerToFloat;
-        pointerToFloat = nullptr;
+        delete pointerToFloatValue;
+        pointerToFloatValue = nullptr;
     }
    
     float add (float, float);
@@ -111,13 +123,22 @@ float FloatType::divide (float x, float y)
 
 struct DoubleType
 {
-    double* pointerToDouble = nullptr;
+    double* pointerToDoubleValue = nullptr;
 
-    DoubleType( double* ptr ) : pointerToDouble ( ptr ) {}
+    // default constructor assigns heap primitive if no value sent in
+    DoubleType() {
+        pointerToDoubleValue = new double();
+     } 
+
+    DoubleType(double doubleIn )
+    {
+        pointerToDoubleValue = new double( doubleIn );
+    }
+    
     ~DoubleType()
     {
-        delete pointerToDouble;
-        pointerToDouble = nullptr;
+        delete pointerToDoubleValue;
+        pointerToDoubleValue = nullptr;
     }
 
     double add (double, double);
@@ -153,7 +174,15 @@ struct IntType
 {
     int* pointerToInt = nullptr;
 
-    IntType( int* ptr ) : pointerToInt ( ptr ) {}
+     // default constructor assigns heap primitive if no value sent in
+    IntType() {
+        pointerToInt = new int();
+    }
+   
+    IntType( int intIn )
+    {
+        pointerToInt = new int ( intIn );
+    }
     ~IntType()
     {
         delete pointerToInt;
@@ -168,7 +197,8 @@ struct IntType
 
 int IntType::add (int x, int y)
 {
-    return (x+y);
+    int result = (x+y);
+    return result;
 }
 
 int IntType::subtract (int x, int y) 
@@ -193,11 +223,11 @@ int IntType::divide (int x, int y)
 
 int main()
 {   
-    HeapA heapA ( new A() );
+    HeapA heapA ;
 
-    FloatType ft ( new float );
-    DoubleType dt ( new double );
-    IntType it ( new int ) ;
+    FloatType ft ( 0.137f );
+    DoubleType dt (0.55 );
+    IntType it ( 137 ) ;
 
     std::cout << "FloatType add result=" << (ft.add(2.0f, 2.0f)) << std::endl;
     std::cout << "FloatType subtract result=" << (ft.subtract(2.0f, 2.0f)) << std::endl;
