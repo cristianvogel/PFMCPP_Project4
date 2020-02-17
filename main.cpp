@@ -14,14 +14,19 @@ New/This/Pointers/References conclusion
          on the heap without leaking, without using smart pointers. 
  */
 
+struct A { };
 
-
-
-
-
-
-
-
+struct HeapA 
+{
+    A* pointerToA = nullptr;
+    
+    HeapA( A* ptrToA ) : pointerToA (ptrToA) {}
+    ~HeapA()
+    {
+        delete pointerToA;
+        pointerToA = nullptr;
+    }
+};
 
 
  /*
@@ -66,6 +71,15 @@ New/This/Pointers/References conclusion
 
 struct FloatType
 {
+    float* pointerToFloat = nullptr;
+
+    FloatType( float* ptr ) : pointerToFloat ( ptr ) {}
+    ~FloatType()
+    {
+        delete pointerToFloat;
+        pointerToFloat = nullptr;
+    }
+   
     float add (float, float);
     float subtract ( float, float);
     float multiply ( float, float);
@@ -97,6 +111,15 @@ float FloatType::divide (float x, float y)
 
 struct DoubleType
 {
+    double* pointerToDouble = nullptr;
+
+    DoubleType( double* ptr ) : pointerToDouble ( ptr ) {}
+    ~DoubleType()
+    {
+        delete pointerToDouble;
+        pointerToDouble = nullptr;
+    }
+
     double add (double, double);
     double subtract ( double, double);
     double multiply ( double, double);
@@ -128,6 +151,15 @@ double DoubleType::divide (double x, double y)
 
 struct IntType
 {
+    int* pointerToInt = nullptr;
+
+    IntType( int* ptr ) : pointerToInt ( ptr ) {}
+    ~IntType()
+    {
+        delete pointerToInt;
+        pointerToInt = nullptr;
+    }
+
     int add (int, int);
     int subtract ( int, int);
     int multiply ( int, int);
@@ -161,9 +193,11 @@ int IntType::divide (int x, int y)
 
 int main()
 {   
-    FloatType ft;
-    DoubleType dt;
-    IntType it;
+    HeapA heapA ( new A() );
+
+    FloatType ft ( new float );
+    DoubleType dt ( new double );
+    IntType it ( new int ) ;
 
     std::cout << "FloatType add result=" << (ft.add(2.0f, 2.0f)) << std::endl;
     std::cout << "FloatType subtract result=" << (ft.subtract(2.0f, 2.0f)) << std::endl;
