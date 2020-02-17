@@ -92,33 +92,37 @@ struct FloatType
         pointerToFloatValue = nullptr;
     }
    
-    float add (float, float);
-    float subtract ( float, float);
-    float multiply ( float, float);
-    float divide (float, float);
+    FloatType& add ( float );
+    FloatType& subtract ( float );
+    FloatType& multiply ( float );
+    FloatType& divide ( float );
 };
 
-float FloatType::add (float x, float y)
+FloatType& FloatType::add ( float x )
 {
-    return (x+y);
+    *pointerToFloatValue += x;
+    return *this;
 }
 
-float FloatType::subtract (float x, float y) 
+FloatType& FloatType::subtract ( float y ) 
 { 
-    return (x-y); 
+    *pointerToFloatValue -= y;
+    return *this; 
 }
 
-float FloatType::multiply (float x, float y) 
+FloatType& FloatType::multiply ( float y) 
 { 
-    return (x*y); 
+    *pointerToFloatValue *= y;
+    return *this; 
 }
 
-float FloatType::divide (float x, float y) 
+FloatType& FloatType::divide ( float y ) 
 { 
-    if (abs(y) > 0) return (x/y);    
+    if (abs(y) > 0) *pointerToFloatValue /= y;    
     
     std::cout << "Divide-by-zero warning  " << std::endl;
-    return (x/y);      
+    *pointerToFloatValue /= 0;
+    return *this;      
 }
 
 struct DoubleType
@@ -128,7 +132,7 @@ struct DoubleType
     // default constructor assigns heap primitive if no value sent in
     DoubleType() {
         pointerToDoubleValue = new double();
-     } 
+    } 
 
     DoubleType(double doubleIn )
     {
@@ -229,11 +233,11 @@ int main()
     DoubleType dt (0.55 );
     IntType it ( 137 ) ;
 
-    std::cout << "FloatType add result=" << (ft.add(2.0f, 2.0f)) << std::endl;
-    std::cout << "FloatType subtract result=" << (ft.subtract(2.0f, 2.0f)) << std::endl;
-    std::cout << "FloatType multiply result=" << (ft.multiply(2.0f, 2.0f)) << std::endl;
-    std::cout << "FloatType divide result=" << (ft.divide(2.0f, 0.0f)) << std::endl << std::endl;
-
+    std::cout << "FloatType add result=" << *( ft.add( 2.0f ).pointerToFloatValue ) << std::endl;
+    std::cout << "FloatType subtract result=" << *( ft.subtract( 2.0f ).pointerToFloatValue ) << std::endl;
+    std::cout << "FloatType multiply result=" << *( ft.multiply( 2.0f ).pointerToFloatValue ) << std::endl;
+    std::cout << "FloatType divide result=" << *( ft.divide( 0.0f).pointerToFloatValue ) << std::endl << std::endl;
+/**
     std::cout << "DoubleType add result=" << (dt.add(2.0, 2.0)) << std::endl;
     std::cout << "DoubleType subtract result=" << (dt.subtract(2.0, 2.0)) << std::endl;
     std::cout << "DoubleType multiply result=" << (dt.multiply(2.0, 2.0)) << std::endl;
@@ -243,6 +247,6 @@ int main()
     std::cout << "IntType subtract result=" << (it.subtract(2, 2)) << std::endl;
     std::cout << "IntType multiply result=" << (it.multiply(2, 2)) << std::endl;
     std::cout << "IntType divide result=" << (it.divide(2, 0 )) << std::endl << std::endl;
-
+**/
     std::cout << "good to go!" << std::endl;
 }
