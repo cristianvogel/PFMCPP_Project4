@@ -69,7 +69,7 @@ struct HeapA
 
 
 
-#include <math.h> // I needed to do an ABS function...
+#include <math.h> // I needed to do an ABS function... and a twoExp
 #include <iostream> // to print a divide-by-zero console message
 
 struct FloatType
@@ -145,82 +145,89 @@ struct DoubleType
         pointerToDoubleValue = nullptr;
     }
 
-    double add (double, double);
-    double subtract ( double, double);
-    double multiply ( double, double);
-    double divide (double, double);
+    DoubleType& add ( double);
+    DoubleType& subtract ( double);
+    DoubleType& multiply ( double);
+    DoubleType& divide ( double);
 };
 
-double DoubleType::add (double x, double y)
+DoubleType& DoubleType::add ( double y)
 {
-    return (x+y);
+    *pointerToDoubleValue += y;
+    return *this;
 }
 
-double DoubleType::subtract (double x, double y) 
+DoubleType& DoubleType::subtract ( double y) 
 { 
-    return (x-y); 
+    *pointerToDoubleValue -= y;
+    return *this; 
 }
 
-double DoubleType::multiply (double x, double y) 
+DoubleType& DoubleType::multiply ( double y) 
 { 
-    return (x*y); 
+    *pointerToDoubleValue *= y;
+    return *this; 
 }
 
-double DoubleType::divide (double x, double y) 
+DoubleType& DoubleType::divide ( double y) 
 { 
-    if (abs(y) > 0) return (x/y);    
+    if (abs(y) > 0) *pointerToDoubleValue /= y;    
     
     std::cout << "Divide-by-zero warning  " << std::endl;
-    return (x/y);      
+    *pointerToDoubleValue /= 0;
+    return *this;      
 }
 
 struct IntType
 {
-    int* pointerToInt = nullptr;
+    int* pointerToIntValue = nullptr;
 
      // default constructor assigns heap primitive if no value sent in
     IntType() {
-        pointerToInt = new int();
+        pointerToIntValue = new int();
     }
    
     IntType( int intIn )
     {
-        pointerToInt = new int ( intIn );
+        pointerToIntValue = new int ( intIn );
     }
     ~IntType()
     {
-        delete pointerToInt;
-        pointerToInt = nullptr;
+        delete pointerToIntValue;
+        pointerToIntValue = nullptr;
     }
 
-    int add (int, int);
-    int subtract ( int, int);
-    int multiply ( int, int);
-    int divide (int, int);
+    IntType& add ( int );
+    IntType& subtract ( int );
+    IntType& multiply ( int );
+    IntType& divide ( int );
 };
 
-int IntType::add (int x, int y)
+IntType& IntType::add ( int y )
 {
-    int result = (x+y);
-    return result;
+    *pointerToIntValue += y;
+    return *this;
 }
 
-int IntType::subtract (int x, int y) 
+IntType& IntType::subtract ( int y ) 
 { 
-    return (x-y); 
+    *pointerToIntValue -= y;
+    return *this;
 }
 
-int IntType::multiply (int x, int y) 
+IntType& IntType::multiply ( int y ) 
 { 
-    return (x*y); 
+    *pointerToIntValue *= y;
+    return *this; 
 }
 
-int IntType::divide (int x, int y) 
+IntType& IntType::divide ( int y ) 
 { 
-    if (y != 0) return (x/y);
+    if (y != 0) *pointerToIntValue /=y; 
     
     std::cout << "Cannot Divide Int by Zero! " << std::endl;
-    return 0;
+    *pointerToIntValue = 0;
+    return *this;
 }
 
 #include <iostream>
@@ -237,16 +244,16 @@ int main()
     std::cout << "FloatType subtract result=" << *( ft.subtract( 2.0f ).pointerToFloatValue ) << std::endl;
     std::cout << "FloatType multiply result=" << *( ft.multiply( 2.0f ).pointerToFloatValue ) << std::endl;
     std::cout << "FloatType divide result=" << *( ft.divide( 0.0f).pointerToFloatValue ) << std::endl << std::endl;
-/**
-    std::cout << "DoubleType add result=" << (dt.add(2.0, 2.0)) << std::endl;
-    std::cout << "DoubleType subtract result=" << (dt.subtract(2.0, 2.0)) << std::endl;
-    std::cout << "DoubleType multiply result=" << (dt.multiply(2.0, 2.0)) << std::endl;
-    std::cout << "DoubleType divide result=" << (dt.divide(2.0, 0)) << std::endl << std::endl;
 
-    std::cout << "IntType add result=" << (it.add(2, 2)) << std::endl;
-    std::cout << "IntType subtract result=" << (it.subtract(2, 2)) << std::endl;
-    std::cout << "IntType multiply result=" << (it.multiply(2, 2)) << std::endl;
-    std::cout << "IntType divide result=" << (it.divide(2, 0 )) << std::endl << std::endl;
-**/
+    std::cout << "DoubleType add result=" << *( dt.add(2.0).pointerToDoubleValue ) << std::endl;
+    std::cout << "DoubleType subtract result=" << *(dt.subtract(2.0).pointerToDoubleValue) << std::endl;
+    std::cout << "DoubleType multiply result=" << *(dt.multiply(2.0).pointerToDoubleValue) << std::endl;
+    std::cout << "DoubleType divide result=" << *(dt.divide(0).pointerToDoubleValue) << std::endl << std::endl;
+
+    std::cout << "IntType add result=" << *( it.add(2).pointerToIntValue ) << std::endl;
+    std::cout << "IntType subtract result=" << *( it.subtract(2).pointerToIntValue ) << std::endl;
+    std::cout << "IntType multiply result=" << *( it.multiply(2).pointerToIntValue ) << std::endl;
+    std::cout << "IntType divide result=" << *( it.divide(0).pointerToIntValue ) << std::endl << std::endl;
+
     std::cout << "good to go!" << std::endl;
 }
