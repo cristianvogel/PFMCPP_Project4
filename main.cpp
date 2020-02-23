@@ -125,15 +125,10 @@ FloatType& FloatType::multiply ( const float y)
 
 FloatType& FloatType::divide ( const float y ) 
 { 
-    if (abs(y) > 0) 
-    { 
-        *pointerToFloatValue /= y; 
-    } 
-    else 
-    { 
-        std::cout << "Divide-by-zero warning  " << std::endl;
-    }   
+    std::string warning = (abs(y) > 0) ? "" : "\x1B[31m Divide-by-zero warning! \x1B[0m";
+    std::cout << warning << std::endl;   
 
+    *pointerToFloatValue /= y; 
     return *this;      
 }
 
@@ -186,15 +181,9 @@ DoubleType& DoubleType::multiply ( const double y)
 
 DoubleType& DoubleType::divide ( const double y) 
 { 
-    if (abs(y) > 0) 
-    {
-        *pointerToDoubleValue /= y;    
-    } 
-    else 
-    {
-        std::cout << "Divide-by-zero warning  " << std::endl;
-    }
-
+    std::string warning = (abs(y) > 0) ? "" : "\x1B[31m Divide-by-zero warning! \x1B[0m";
+    std::cout << warning << std::endl;
+    *pointerToDoubleValue /= y;    
     return *this;      
 }
 
@@ -253,7 +242,7 @@ IntType& IntType::divide ( const int y )
     } 
     else 
     {
-        std::cout << "Cannot Divide Int by Zero! " << std::endl;
+        std::cout << "\x1B[31m Cannot divide Int by Zero! \x1B[0m" << std::endl;
     }
 
     return *this;
@@ -403,7 +392,7 @@ int main()
     std::cout << "FloatType add result=" << *( ft.add( 2.0f ).pointerToFloatValue ) << std::endl;
     std::cout << "FloatType subtract result=" << *( ft.subtract( 2.0f ).pointerToFloatValue ) << std::endl;
     std::cout << "FloatType multiply result=" << *( ft.multiply( 2.0f ).pointerToFloatValue ) << std::endl;
-    std::cout << "FloatType divide result=" << *( ft.divide( 0.0f).pointerToFloatValue ) << std::endl << std::endl;
+    std::cout << "FloatType divide result=" << *( ft.divide( 16.0f).pointerToFloatValue ) << std::endl << std::endl;
 
     std::cout << "DoubleType add result=" << *( dt.add(2.0).pointerToDoubleValue ) << std::endl;
     std::cout << "DoubleType subtract result=" << *(dt.subtract(2.0).pointerToDoubleValue) << std::endl;
