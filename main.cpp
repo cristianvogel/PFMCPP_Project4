@@ -261,7 +261,6 @@ FloatType& FloatType::subtract( const DoubleType& dt )
 
 FloatType& FloatType::multiply( const DoubleType& dt) 
 { 
-    *pointerToFloatValue *= *dt.pointerToDoubleValue;
     return multiply( *dt.pointerToDoubleValue ); 
 }
 
@@ -277,13 +276,11 @@ FloatType& FloatType::add( const IntType& it )
 
 FloatType& FloatType::subtract( const IntType& it ) 
 { 
-    *pointerToFloatValue -= *it.pointerToIntValue;
     return subtract( *it.pointerToIntValue ); 
 }
 
 FloatType& FloatType::multiply( const IntType& it) 
 { 
-    *pointerToFloatValue *= *it.pointerToIntValue;
     return multiply( *it.pointerToIntValue )  ; 
 }
 
@@ -299,13 +296,11 @@ DoubleType& DoubleType::add( const FloatType& ft )
 
 DoubleType& DoubleType::subtract( const FloatType& ft ) 
 { 
-    *pointerToDoubleValue -= *ft.pointerToFloatValue;
     return subtract( *ft.pointerToFloatValue ); 
 }
 
 DoubleType& DoubleType::multiply( const FloatType& ft ) 
 { 
-    *pointerToDoubleValue *= *ft.pointerToFloatValue;
     return multiply ( *ft.pointerToFloatValue );
 }
 
@@ -321,13 +316,11 @@ DoubleType& DoubleType::add( const IntType& it )
 
 DoubleType& DoubleType::subtract( const IntType& it ) 
 { 
-    *pointerToDoubleValue -= *it.pointerToIntValue;
     return subtract( *it.pointerToIntValue ); 
 }
 
 DoubleType& DoubleType::multiply( const IntType& it ) 
 { 
-    *pointerToDoubleValue *= *it.pointerToIntValue;
     return multiply( *it.pointerToIntValue ); 
 }
 
@@ -385,9 +378,9 @@ int main()
     HeapA heapA ; 
 
     //assign heap primitives
-    FloatType ft ( 0.137f );
-    DoubleType dt (0.137 );
-    IntType it ( 137 ) ;
+    FloatType ft ( 2.0f );
+    DoubleType dt ( 2 );
+    IntType it ( 2 ) ;
 
     std::cout << "FloatType add result=" << *( ft.add( 2.0f ).pointerToFloatValue ) << std::endl;
     std::cout << "FloatType subtract result=" << *( ft.subtract( 2.0f ).pointerToFloatValue ) << std::endl;
