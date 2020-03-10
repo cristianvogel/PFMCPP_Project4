@@ -42,13 +42,15 @@ send me a DM to check your pull request
 #include <iostream> // to print a divide-by-zero console message
 
 //forward declarations of other types for overloaded member functions
-struct DoubleType;
-struct IntType;
+//struct DoubleType;
+//struct IntType;
 
 struct FloatType
 {
+    private:
     float* pointerToFloatValue = nullptr;
 
+    public:
     FloatType(float floatIn )
     {
         pointerToFloatValue = new float( floatIn );
@@ -64,6 +66,10 @@ struct FloatType
     FloatType& subtract ( float );
     FloatType& multiply ( float );
     FloatType& divide ( float );
+
+    operator float() { return *pointerToFloatValue; }
+    operator int() { return *pointerToFloatValue; }
+    operator double() { return *pointerToFloatValue; }
 };
 
 FloatType& FloatType::add ( const float x )
@@ -95,8 +101,10 @@ FloatType& FloatType::divide ( const float y )
 
 struct DoubleType
 {
+    private:
     double* pointerToDoubleValue = nullptr;
 
+    public:
     DoubleType(double doubleIn )
     {
         pointerToDoubleValue = new double( doubleIn );
@@ -112,6 +120,10 @@ struct DoubleType
     DoubleType& subtract ( double );
     DoubleType& multiply ( double );
     DoubleType& divide ( double );
+
+    operator double() { return *pointerToDoubleValue; }
+    operator float() { return *pointerToDoubleValue; }
+    operator int() { return *pointerToDoubleValue; }
 };
 
 DoubleType& DoubleType::add ( const double y)
@@ -142,8 +154,10 @@ DoubleType& DoubleType::divide ( const double y)
 
 struct IntType
 {
+    private:
     int* pointerToIntValue = nullptr;
    
+    public:
     IntType( int intIn )
     {
         pointerToIntValue = new int ( intIn );
@@ -158,6 +172,10 @@ struct IntType
     IntType& subtract ( int );
     IntType& multiply ( int );
     IntType& divide ( int );
+
+    operator int() { return *pointerToIntValue; }
+    operator double() { return *pointerToIntValue; }
+    operator float() { return *pointerToIntValue; }
 };
 
 IntType& IntType::add ( const int y )
