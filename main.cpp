@@ -64,14 +64,6 @@ struct FloatType
     FloatType& subtract ( float );
     FloatType& multiply ( float );
     FloatType& divide ( float );
-    FloatType& add ( const DoubleType& );
-    FloatType& subtract ( const DoubleType& );
-    FloatType& multiply ( const DoubleType& );
-    FloatType& divide ( const DoubleType& );
-    FloatType& add ( const IntType& );
-    FloatType& subtract ( const IntType& );
-    FloatType& multiply ( const IntType& );
-    FloatType& divide ( const IntType& );
 };
 
 FloatType& FloatType::add ( const float x )
@@ -120,14 +112,6 @@ struct DoubleType
     DoubleType& subtract ( double );
     DoubleType& multiply ( double );
     DoubleType& divide ( double );
-    DoubleType& add ( const FloatType& );
-    DoubleType& subtract ( const FloatType& );
-    DoubleType& multiply ( const FloatType& );
-    DoubleType& divide ( const FloatType& );
-    DoubleType& add ( const IntType& );
-    DoubleType& subtract ( const IntType& );
-    DoubleType& multiply ( const IntType& );
-    DoubleType& divide ( const IntType& );
 };
 
 DoubleType& DoubleType::add ( const double y)
@@ -174,15 +158,6 @@ struct IntType
     IntType& subtract ( int );
     IntType& multiply ( int );
     IntType& divide ( int );
-    IntType& divide ( const IntType& );
-    IntType& add ( const FloatType& );
-    IntType& subtract ( const FloatType& );
-    IntType& multiply ( const FloatType& );
-    IntType& divide ( const FloatType& );
-    IntType& add ( const DoubleType& );
-    IntType& subtract ( const DoubleType& );
-    IntType& multiply ( const DoubleType& );
-    IntType& divide ( const DoubleType& );
 };
 
 IntType& IntType::add ( const int y )
@@ -217,134 +192,12 @@ IntType& IntType::divide ( const int y )
     return *this;
 }
 
-//additional member functions as per instruction 4
-FloatType& FloatType::add( const DoubleType& dt )
-{
-    return add( *dt.pointerToDoubleValue );
-}
-
-FloatType& FloatType::subtract( const DoubleType& dt ) 
-{ 
-    return subtract( *dt.pointerToDoubleValue ); 
-}
-
-FloatType& FloatType::multiply( const DoubleType& dt) 
-{ 
-    return multiply( *dt.pointerToDoubleValue ); 
-}
-
-FloatType& FloatType::divide( const DoubleType& dt ) 
-{ 
-    return divide( *dt.pointerToDoubleValue );   
-}
-
-FloatType& FloatType::add( const IntType& it )
-{
-    return add( *it.pointerToIntValue ) ;
-}
-
-FloatType& FloatType::subtract( const IntType& it ) 
-{ 
-    return subtract( *it.pointerToIntValue ); 
-}
-
-FloatType& FloatType::multiply( const IntType& it) 
-{ 
-    return multiply( *it.pointerToIntValue )  ; 
-}
-
-FloatType& FloatType::divide( const IntType& it ) 
-{ 
-    return divide( *it.pointerToIntValue );      
-}
-
-DoubleType& DoubleType::add( const FloatType& ft )
-{
-    return add( *ft.pointerToFloatValue ); 
-}
-
-DoubleType& DoubleType::subtract( const FloatType& ft ) 
-{ 
-    return subtract( *ft.pointerToFloatValue ); 
-}
-
-DoubleType& DoubleType::multiply( const FloatType& ft ) 
-{ 
-    return multiply ( *ft.pointerToFloatValue );
-}
-
-DoubleType& DoubleType::divide( const FloatType& ft ) 
-{ 
-    return divide( *ft.pointerToFloatValue );      
-}
-
-DoubleType& DoubleType::add( const IntType& it )
-{
-    return add( *it.pointerToIntValue );
-}
-
-DoubleType& DoubleType::subtract( const IntType& it ) 
-{ 
-    return subtract( *it.pointerToIntValue ); 
-}
-
-DoubleType& DoubleType::multiply( const IntType& it ) 
-{ 
-    return multiply( *it.pointerToIntValue ); 
-}
-
-DoubleType& DoubleType::divide( const IntType& it ) 
-{ 
-    return divide( *it.pointerToIntValue );      
-}
-
-IntType& IntType::add( const FloatType& ft )
-{
-    return add( *ft.pointerToFloatValue );
-}
-
-IntType& IntType::subtract( const FloatType& ft ) 
-{ 
-    return subtract( *ft.pointerToFloatValue );
-}
-
-IntType& IntType::multiply( const FloatType& ft ) 
-{ 
-    return multiply( *ft.pointerToFloatValue );
-}
-
-IntType& IntType::divide( const FloatType& ft ) 
-{ 
-    return divide( *ft.pointerToFloatValue );
-}
-
-IntType& IntType::add( const DoubleType& dt )
-{
-    return add( *dt.pointerToDoubleValue );
-}
-
-IntType& IntType::subtract( const DoubleType& dt ) 
-{ 
-    return add( *dt.pointerToDoubleValue ) ;
-}
-
-IntType& IntType::multiply ( const DoubleType& dt ) 
-{ 
-    return multiply( *dt.pointerToDoubleValue ); 
-}
-
-IntType& IntType::divide ( const DoubleType& dt ) 
-{ 
-    return divide( *dt.pointerToDoubleValue );
-}
 
 
 #include <iostream>
 
 int main()
 {   
-    //testing instruction 0
-    HeapA heapA ; 
 
     //assign heap primitives
     FloatType ft ( 2.0f );
