@@ -45,10 +45,10 @@ send me a DM to check your pull request
 
 struct FloatType
 {
-    private:
+private:
     float* pointerToFloatValue = nullptr;
 
-    public:
+public:
     FloatType(float floatIn )
     {
         pointerToFloatValue = new float( floatIn );
@@ -98,10 +98,10 @@ FloatType& FloatType::divide ( const float y )
 
 struct DoubleType
 {
-    private:
+private:
     double* pointerToDoubleValue = nullptr;
 
-    public:
+public:
     DoubleType(double doubleIn )
     {
         pointerToDoubleValue = new double( doubleIn );
@@ -149,10 +149,10 @@ DoubleType& DoubleType::divide ( const double y)
 
 struct IntType
 {
-    private:
+private:
     int* pointerToIntValue = nullptr;
    
-    public:
+public:
     IntType( int intIn )
     {
         pointerToIntValue = new int ( intIn );
