@@ -167,7 +167,7 @@ struct IntType
     IntType& subtract ( int );
     IntType& multiply ( int );
     IntType& divide ( int );
-
+    
     operator int() { return *pointerToIntValue; }
 };
 
@@ -203,8 +203,6 @@ IntType& IntType::divide ( const int y )
     return *this;
 }
 
-
-
 #include <iostream>
 
 int main()
@@ -222,15 +220,16 @@ int main()
 
     std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
     std::cout << "DoubleType subtract result=" << dt.subtract(2.0) << std::endl;
-    std::cout << "DoubleType multiply result=" << dt.multiply(2.0) << std::endl;
+    std::cout << "DoubleType multiply result=" << dt.multiply(static_cast<double>(2.5f)) << std::endl;
     std::cout << "DoubleType divide result=" << dt.divide(0) << std::endl << std::endl;
 
-    std::cout << "IntType add result=" << it.add(2) << std::endl;
+    std::cout << "IntType add result=" << it.add(static_cast<int>(2.25f)) << std::endl;
     std::cout << "IntType subtract result=" << it.subtract(2) << std::endl;
     std::cout << "IntType multiply result=" << it.multiply(2) << std::endl;
     std::cout << "IntType divide result=" << it.divide(0) << std::endl << std::endl;
 
-    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(2).subtract(10).add(100) ) << std::endl;
+    //my example of a rounding loss causing an int divide by zero in the chain
+    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(static_cast<int>(0.125f)).subtract(10).add(100) ) << std::endl;
 
     std::cout << "good to go!" << std::endl;
 }
