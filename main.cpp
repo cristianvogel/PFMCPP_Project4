@@ -92,7 +92,9 @@ FloatType& FloatType::divide ( const float y )
     if (abs(y) > 0) 
     {
        *pointerToFloatValue /= y;
-    } else { 
+    } 
+    else 
+    { 
         std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
     }
     
@@ -147,7 +149,9 @@ DoubleType& DoubleType::divide ( const double y)
     if (abs(y) > 0) 
     { 
         *pointerToDoubleValue /= y; 
-    } else {
+    } 
+    else 
+    {
         std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl;
         *pointerToDoubleValue /= y; 
     }   
