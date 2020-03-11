@@ -89,10 +89,13 @@ FloatType& FloatType::multiply ( const float y)
 
 FloatType& FloatType::divide ( const float y ) 
 { 
-    std::string warning = (abs(y) > 0) ? "" : "\x1B[31m Divide-by-zero warning! \x1B[0m"; FIXME ternary expression results in unnecessary string object creation.  use regular if/else
-    std::cout << warning << std::endl;   
-
-    *pointerToFloatValue /= y; 
+    if (abs(y) > 0) 
+    {
+       *pointerToFloatValue /= y;
+    } else { 
+        std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
+    }
+    
     return *this;      
 }
 
@@ -141,9 +144,13 @@ DoubleType& DoubleType::multiply ( const double y)
 
 DoubleType& DoubleType::divide ( const double y) 
 { 
-    std::string warning = (abs(y) > 0) ? "" : "\x1B[31m Divide-by-zero warning! \x1B[0m"; FIXME ternary expression results in unnecessary string object creation.  use regular if/else
-    std::cout << warning << std::endl;
-    *pointerToDoubleValue /= y;    
+    if (abs(y) > 0) 
+    { 
+        *pointerToDoubleValue /= y; 
+    } else {
+        std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl;
+        *pointerToDoubleValue /= y; 
+    }   
     return *this;      
 }
 
