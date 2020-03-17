@@ -100,11 +100,21 @@ public:
     FloatType& pow ( const IntType& );
     FloatType& pow ( const DoubleType& );
 
+    const FloatType& powInternal( float ) const;
     const FloatType& powInternal( const FloatType& ) const;
     const FloatType& powInternal( const DoubleType& ) const { return *this; }
+    const FloatType& powInternal( const IntType& ) const { return *this; }
 
     operator float() { return *pointerToFloatValue; }
 };
+
+FloatType& FloatType::pow ( float x )
+{
+    *pointerToFloatValue = *(FloatType::powInternal( x )).pointerToFloatValue;
+
+    std::cout << " call floatType " << *(this->pointerToFloatValue )<< "\n";
+    return *this;
+}
 
 FloatType& FloatType::pow ( const FloatType& y ) 
 {
@@ -118,9 +128,28 @@ FloatType& FloatType::pow ( const DoubleType& y )
     return *this; 
 }
 
+FloatType& FloatType::pow ( const IntType& y ) 
+{
+    FloatType::powInternal( y );
+    return *this; 
+}
+
+const FloatType& FloatType::powInternal( float y ) const
+{ 
+    *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, y ));
+
+    std::cout << "\n.. call internal float " << *(this->pointerToFloatValue )<< "\n";
+
+    return *this; 
+}
+
+
 const FloatType& FloatType::powInternal( const FloatType& y ) const
 { 
     *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, *y.pointerToFloatValue ));
+
+    std::cout << "\n.. call internal floatType& " << *(this->pointerToFloatValue )<< "\n";
+
     return *this; 
 }
 
@@ -180,7 +209,7 @@ public:
     DoubleType& divide ( double );
 
     operator double() { return *pointerToDoubleValue; }
-    operator const FloatType& () { return static_cast<float> (*pointerToDoubleValue) ; }
+    //operator const FloatType& () { return (static_cast<float> (*pointerToDoubleValue)) ; }
 };
 
 DoubleType& DoubleType::add ( const double y)
@@ -280,6 +309,8 @@ int main()
     FloatType ft ( 10 );
     DoubleType dt ( 10 );
     IntType it ( 10 ) ;
+
+    std::cout << " power =" << ft.pow( 3.0f ) << std::endl; 
 
     std::cout << "FloatType add result=" <<  ft.add( 2 )  << std::endl;
     std::cout << "FloatType subtract result=" << ft.subtract( 2.0f )  << std::endl;
