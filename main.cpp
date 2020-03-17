@@ -67,11 +67,11 @@ private:
     float x{0}, y{0};
 };
 
-
-
-
-#include <math.h> // I needed to do an ABS function
+#include <cmath> 
 #include <iostream> // to print a divide-by-zero console message
+
+struct IntType;
+struct DoubleType;
 
 struct FloatType
 {
@@ -95,11 +95,36 @@ public:
     FloatType& multiply ( float );
     FloatType& divide ( float );
 
-    operator float() { return *pointerToFloatValue; }
+    FloatType& pow ( float );
+    FloatType& pow ( const FloatType& );
+    FloatType& pow ( const IntType& );
+    FloatType& pow ( const DoubleType& );
 
+    const FloatType& powInternal( const FloatType& ) const;
+    const FloatType& powInternal( const DoubleType& ) const { return *this; }
+
+    operator float() { return *pointerToFloatValue; }
 };
 
-FloatType& FloatType::add ( const float x )
+FloatType& FloatType::pow ( const FloatType& y ) 
+{
+    FloatType::powInternal( y );
+    return *this; 
+}
+
+FloatType& FloatType::pow ( const DoubleType& y ) 
+{
+    FloatType::powInternal( y );
+    return *this; 
+}
+
+const FloatType& FloatType::powInternal( const FloatType& y ) const
+{ 
+    *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, *y.pointerToFloatValue ));
+    return *this; 
+}
+
+FloatType& FloatType::add ( float x )
 {
     *pointerToFloatValue += x;
     return *this;
@@ -119,7 +144,7 @@ FloatType& FloatType::multiply ( const float y)
 
 FloatType& FloatType::divide ( const float y ) 
 { 
-    if (abs(y) > 0) 
+    if (std::abs(y) > 0) 
     {
        *pointerToFloatValue /= y;
     } 
@@ -130,6 +155,7 @@ FloatType& FloatType::divide ( const float y )
     
     return *this;      
 }
+
 
 struct DoubleType
 {
@@ -154,6 +180,7 @@ public:
     DoubleType& divide ( double );
 
     operator double() { return *pointerToDoubleValue; }
+    operator const FloatType& () { return static_cast<float> (*pointerToDoubleValue) ; }
 };
 
 DoubleType& DoubleType::add ( const double y)
@@ -176,7 +203,7 @@ DoubleType& DoubleType::multiply ( const double y)
 
 DoubleType& DoubleType::divide ( const double y) 
 { 
-    if (abs(y) > 0) 
+    if (std::abs(y) > 0) 
     { 
         *pointerToDoubleValue /= y; 
     } 
