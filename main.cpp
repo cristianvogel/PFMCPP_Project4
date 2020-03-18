@@ -54,15 +54,27 @@ send me a DM to check your pull request
 
  Wait for my code review.
  */
+struct IntType;
+struct DoubleType;
+struct FloatType;
 
 struct Point
 {
+    Point() : x{0}, y{0} 
+    {      
+    }
+
+    Point( const FloatType& );
+    Point( const DoubleType& );
+    Point( const IntType& );
+
     Point& multiply(float m)
     {
         x *= m;
         y *= m;
         return *this;
     }
+
 private:
     float x{0}, y{0};
 };
@@ -70,8 +82,7 @@ private:
 #include <cmath> 
 #include <iostream> // to print a divide-by-zero console message
 
-struct IntType;
-struct DoubleType;
+
 
 struct FloatType
 {
@@ -101,6 +112,13 @@ public:
     const FloatType& powInternal( float ) const;
     float getValue() const { return *pointerToFloatValue; }
 };
+
+
+Point::Point( const FloatType& ft) : 
+    x{ ft.getValue() } , 
+    y{ ft.getValue() } 
+{      
+}
 
 FloatType& FloatType::pow ( float x )
 {
@@ -180,6 +198,12 @@ public:
     double getValue() const { return *pointerToDoubleValue;} 
 };
 
+Point::Point( const DoubleType& dt) : 
+    x{ static_cast<float>(dt.getValue()) } , 
+    y{ static_cast<float>(dt.getValue()) } 
+{      
+}
+
 DoubleType& DoubleType::pow ( double x )
 {
     DoubleType::powInternal( x );
@@ -256,6 +280,12 @@ public:
     const IntType& powInternal( int ) const;
     int getValue() const { return *pointerToIntValue;} 
 };
+
+Point::Point( const IntType& it) : 
+    x{ static_cast<float>(it.getValue()) } , 
+    y{ static_cast<float>(it.getValue()) } 
+{      
+}
 
 IntType& IntType::pow ( int x )
 {
