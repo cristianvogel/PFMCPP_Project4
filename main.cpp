@@ -96,26 +96,47 @@ public:
     FloatType& divide ( float );
 
     FloatType& pow ( float );
+    FloatType& pow ( int );
+    FloatType& pow ( double );
+/*
     FloatType& pow ( const FloatType& );
-    FloatType& pow ( const IntType& );
     FloatType& pow ( const DoubleType& );
-
+    FloatType& pow ( const IntType& );
+*/
     const FloatType& powInternal( float ) const;
+    const FloatType& powInternal( const DoubleType& ) const; 
     const FloatType& powInternal( const FloatType& ) const;
-    const FloatType& powInternal( const DoubleType& ) const { return *this; }
-    const FloatType& powInternal( const IntType& ) const { return *this; }
+    const FloatType& powInternal( const IntType& ) const;
 
-    operator float() { return *pointerToFloatValue; }
+    operator float() { return getFloatValue(); }
+
+    float getFloatValue() { return *pointerToFloatValue; }
 };
 
 FloatType& FloatType::pow ( float x )
 {
     FloatType::powInternal( x );
 
-    std::cout << ".. Call to pow ( float ) result: " << *(this->pointerToFloatValue )<< "\n";
+    std::cout << "\x1B[31m.. Call to pow ( float ) result: \x1B[0m" << *(this->pointerToFloatValue )<< "\n";
     return *this;
 }
 
+FloatType& FloatType::pow ( int x )
+{
+    FloatType::powInternal( x );
+
+    std::cout << "\x1B[34m.... Call to pow ( int ) result: \x1B[0m" << *(this->pointerToFloatValue )<< "\n";
+    return *this;
+}
+
+FloatType& FloatType::pow ( double x )
+{
+    FloatType::powInternal( x );
+
+    std::cout << "\x1B[34m.... Call to pow ( double ) result: \x1B[0m" << *(this->pointerToFloatValue )<< "\n";
+    return *this;
+}
+/*
 FloatType& FloatType::pow ( const FloatType& y ) 
 {
     FloatType::powInternal( y );
@@ -125,6 +146,7 @@ FloatType& FloatType::pow ( const FloatType& y )
 FloatType& FloatType::pow ( const DoubleType& y ) 
 {
     FloatType::powInternal( y );
+    std::cout << "\x1B[34m.... Call to pow ( const DoubeType& ) result: \x1B[0m" << *(this->pointerToFloatValue )<< "\n";
     return *this; 
 }
 
@@ -133,22 +155,13 @@ FloatType& FloatType::pow ( const IntType& y )
     FloatType::powInternal( y );
     return *this; 
 }
+*/
 
 const FloatType& FloatType::powInternal( float y ) const
 { 
     *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, y ));
 
-    std::cout << "\n.. call powInternal ( float ) " << *(this->pointerToFloatValue )<< "\n";
-
-    return *this; 
-}
-
-
-const FloatType& FloatType::powInternal( const FloatType& y ) const
-{ 
-    *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, *y.pointerToFloatValue ));
-
-    std::cout << "\n.. call powInternal ( FloatType& ) " << *(this->pointerToFloatValue )<< "\n";
+    std::cout << "\n \x1B[36m... call powInternal ( float ) > \x1B[0m \n" << *(this->pointerToFloatValue )<< "\n";
 
     return *this; 
 }
@@ -208,9 +221,19 @@ public:
     DoubleType& multiply ( double );
     DoubleType& divide ( double );
 
-    operator double() { return *pointerToDoubleValue; }
-    //operator const FloatType& () { return (static_cast<float> (*pointerToDoubleValue)) ; }
+    operator double() { return getDoubleValue(); }
+
+    double getDoubleValue() const { return *pointerToDoubleValue;} 
 };
+
+const FloatType& FloatType::powInternal( const DoubleType& y ) const
+{ 
+    *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, y.getDoubleValue() ));
+
+    std::cout << "\n.. call powInternal ( DoubleType& ) " << *(this->pointerToFloatValue )<< "\n";
+
+    return *this; 
+}
 
 DoubleType& DoubleType::add ( const double y)
 {
@@ -301,6 +324,7 @@ IntType& IntType::divide ( const int y )
 }
 
 #include <iostream>
+#include <typeinfo> // for typeid()
 
 int main()
 {   
@@ -310,7 +334,10 @@ int main()
     DoubleType dt ( 10 );
     IntType it ( 10 ) ;
 
-    std::cout << " power =" << ft.pow( 3.0f ) << std::endl; 
+    std::cout << "FloatType pow ( 3.0f ) = " << ft.pow( 2.0f ) << std::endl; 
+    std::cout << "FloatType pow ( 3 ) = " << ft.pow( static_cast<int>(2) ) << std::endl; 
+    std::cout << "FloatType pow ( 3.5 ) = " << ft.pow( static_cast<double>(2) ) << " \x1B[32m .. will lose precision \x1B[0m\n" << std::endl; 
+    std::cout << "FloatType pow ( dt ) = " << ft.pow( dt ) << std::endl; 
 
     std::cout << "FloatType add result=" <<  ft.add( 2 )  << std::endl;
     std::cout << "FloatType subtract result=" << ft.subtract( 2.0f )  << std::endl;
