@@ -110,9 +110,9 @@ public:
 
 FloatType& FloatType::pow ( float x )
 {
-    *pointerToFloatValue = *(FloatType::powInternal( x )).pointerToFloatValue;
+    FloatType::powInternal( x );
 
-    std::cout << " call floatType " << *(this->pointerToFloatValue )<< "\n";
+    std::cout << ".. Call to pow ( float ) result: " << *(this->pointerToFloatValue )<< "\n";
     return *this;
 }
 
@@ -138,7 +138,7 @@ const FloatType& FloatType::powInternal( float y ) const
 { 
     *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, y ));
 
-    std::cout << "\n.. call internal float " << *(this->pointerToFloatValue )<< "\n";
+    std::cout << "\n.. call powInternal ( float ) " << *(this->pointerToFloatValue )<< "\n";
 
     return *this; 
 }
@@ -148,7 +148,7 @@ const FloatType& FloatType::powInternal( const FloatType& y ) const
 { 
     *pointerToFloatValue = static_cast<float>( std::pow( *pointerToFloatValue, *y.pointerToFloatValue ));
 
-    std::cout << "\n.. call internal floatType& " << *(this->pointerToFloatValue )<< "\n";
+    std::cout << "\n.. call powInternal ( FloatType& ) " << *(this->pointerToFloatValue )<< "\n";
 
     return *this; 
 }
