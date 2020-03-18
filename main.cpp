@@ -54,13 +54,18 @@ send me a DM to check your pull request
 
  Wait for my code review.
  */
+ 
+#include <cmath> 
+#include <iostream> 
+#include <string>
+
 struct IntType;
 struct DoubleType;
 struct FloatType;
 
 struct Point
 {
-    Point() : x{0}, y{0} 
+    Point() : x{1}, y{1} 
     {      
     }
 
@@ -75,14 +80,19 @@ struct Point
         return *this;
     }
 
+    Point& multiply(FloatType& m);
+    Point& multiply(DoubleType& m);
+    Point& multiply(IntType& m);
+
+    std::string toString() 
+    { 
+        std::string result = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+        return result;
+    }
+
 private:
-    float x{0}, y{0};
+    float x{1}, y{1};
 };
-
-#include <cmath> 
-#include <iostream> // to print a divide-by-zero console message
-
-
 
 struct FloatType
 {
@@ -117,7 +127,14 @@ public:
 Point::Point( const FloatType& ft) : 
     x{ ft.getValue() } , 
     y{ ft.getValue() } 
-{      
+{    
+}
+
+Point& Point::multiply( FloatType& m) 
+{
+    x *= m.getValue();
+    y *= m.getValue();
+    return *this;
 }
 
 FloatType& FloatType::pow ( float x )
@@ -204,6 +221,13 @@ Point::Point( const DoubleType& dt) :
 {      
 }
 
+Point& Point::multiply( DoubleType& m) 
+{
+    x *= m.getValue();
+    y *= m.getValue();
+    return *this;
+}
+
 DoubleType& DoubleType::pow ( double x )
 {
     DoubleType::powInternal( x );
@@ -287,6 +311,13 @@ Point::Point( const IntType& it) :
 {      
 }
 
+Point& Point::multiply( IntType& m) 
+{
+    x *= m.getValue();
+    y *= m.getValue();
+    return *this;
+}
+
 IntType& IntType::pow ( int x )
 {
     IntType::powInternal( x );
@@ -346,6 +377,7 @@ int main()
     FloatType ft ( 2.0f );
     DoubleType dt ( 0.5 );
     IntType it ( 2 ) ;
+    Point p;
 
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( static_cast<int>(2) ) << std::endl; 
@@ -384,7 +416,11 @@ int main()
     std::cout << "IntType divide result=" << it.divide(0) << std::endl << std::endl;
 
     //my example of a rounding loss causing an int divide by zero in the chain
-    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(static_cast<int>(0.125f)).subtract(10).add(100) ) << std::endl;
+    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(static_cast<int>(0.125f)).subtract(10).add(100) ) << div << std::endl;
+
+    std::cout << "\x1B[36m Point multiplication with FloatType > Point \x1B[0m" << (p.multiply( ft )).toString() << std::endl;
+    std::cout << "\x1B[36m Point multiplication with DoubleType > Point \x1B[0m" << (p.multiply( dt )).toString() << std::endl;
+    std::cout << "\x1B[36m Point multiplication with IntType > Point \x1B[0m" << (p.multiply( it )).toString() << std::endl;
 
     std::cout << "good to go!" << std::endl;
 }
