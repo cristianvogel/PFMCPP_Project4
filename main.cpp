@@ -65,7 +65,7 @@ struct FloatType;
 
 struct Point
 {
-    Point() : x{1}, y{1} 
+    Point( float _x, float _y ) : x{_x}, y{_y} 
     {      
     }
 
@@ -377,7 +377,8 @@ int main()
     FloatType ft ( 2.0f );
     DoubleType dt ( 0.5 );
     IntType it ( 2 ) ;
-    Point p;
+    Point p1(3.0f, 2.0f);
+    Point p2(1.0f, 1.618f);
 
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( static_cast<int>(2) ) << std::endl; 
@@ -418,9 +419,9 @@ int main()
     //my example of a rounding loss causing an int divide by zero in the chain
     std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(static_cast<int>(0.125f)).subtract(10).add(100) ) << div << std::endl;
 
-    std::cout << "\x1B[36m Point multiplication with FloatType > Point \x1B[0m" << (p.multiply( ft )).toString() << std::endl;
-    std::cout << "\x1B[36m Point multiplication with DoubleType > Point \x1B[0m" << (p.multiply( dt )).toString() << std::endl;
-    std::cout << "\x1B[36m Point multiplication with IntType > Point \x1B[0m" << (p.multiply( it )).toString() << std::endl;
+    std::cout << "\x1B[36m Point multiplication with FloatType > Point \x1B[0m" << (p1.multiply( ft )).toString() << std::endl;
+    std::cout << "\x1B[36m Point multiplication with DoubleType > Point \x1B[0m" << (p2.multiply( dt )).toString() << std::endl;
+    std::cout << "\x1B[36m Point multiplication with IntType > Point \x1B[0m" << (p1.multiply( it )).toString() << std::endl;
 
     std::cout << "good to go!" << std::endl;
 }
