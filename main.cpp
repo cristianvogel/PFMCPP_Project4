@@ -66,7 +66,7 @@ struct FloatType;
 
 struct Point
 {
-    Point( float _x, float _y ) : x{_x}, y{_y} 
+    Point( float x_, float y_ ) : x{ x_ }, y{ y_ } 
     {      
     }
 
@@ -92,7 +92,7 @@ struct Point
     }
 
 private:
-    float x{1}, y{1};
+    float x{0}, y{0};
 };
 
 struct FloatType
@@ -117,6 +117,8 @@ public:
     FloatType& multiply ( float );
     FloatType& divide ( float );
     FloatType& pow ( float );
+    FloatType& pow ( double ); 
+    FloatType& pow ( int );
 
     operator float() { return getValue(); }
     
@@ -153,6 +155,16 @@ const FloatType& FloatType::powInternal( float y ) const
     std::cout << "\n \x1B[36m... call powInternal ( float ) > \x1B[0m .. \n";
 
     return *this; 
+}
+
+FloatType& FloatType::pow ( double d_ ) 
+{
+    FloatType::pow( static_cast<float>(d_) ); return *this;  
+}
+
+FloatType& FloatType::pow ( int i_ ) 
+{ 
+    FloatType::pow( static_cast<float>(i_) ); return *this;  
 }
 
 FloatType& FloatType::add ( float x )
@@ -209,8 +221,10 @@ public:
     DoubleType& multiply ( double );
     DoubleType& divide ( double );
     DoubleType& pow ( double );
+    DoubleType& pow ( float );
+    DoubleType& pow ( int );
 
-    operator double() { return getValue(); }
+    operator float() { return static_cast<float>(getValue()); }
 
     const DoubleType& powInternal( double ) const;
     double getValue() const { return *pointerToDoubleValue;} 
@@ -224,8 +238,8 @@ Point::Point( const DoubleType& dt) :
 
 Point& Point::multiply( DoubleType& m) 
 {
-    x *= m.getValue();
-    y *= m.getValue();
+    x *= static_cast<float>(m.getValue());
+    y *= static_cast<float>(m.getValue());
     return *this;
 }
 
@@ -244,6 +258,16 @@ const DoubleType& DoubleType::powInternal( double y ) const
     std::cout << "\n \x1B[36m... call powInternal ( double ) > \x1B[0m .. \n";
 
     return *this; 
+}
+
+DoubleType& DoubleType::pow ( float d_ ) 
+{
+    DoubleType::pow( static_cast<double>(d_) ); return *this;  
+}
+
+DoubleType& DoubleType::pow ( int i_ ) 
+{ 
+    DoubleType::pow( static_cast<double>(i_) ); return *this;  
 }
 
 DoubleType& DoubleType::add ( const double y)
@@ -299,8 +323,10 @@ public:
     IntType& multiply ( int );
     IntType& divide ( int );
     IntType& pow ( int );
+    IntType& pow ( float ); 
+    IntType& pow ( double ); 
 
-    operator int() { return getValue(); }
+    operator float() { return static_cast<float>(getValue()); }
 
     const IntType& powInternal( int ) const;
     int getValue() const { return *pointerToIntValue;} 
@@ -314,8 +340,8 @@ Point::Point( const IntType& it) :
 
 Point& Point::multiply( IntType& m) 
 {
-    x *= m.getValue();
-    y *= m.getValue();
+    x *= static_cast<float>(m.getValue());
+    y *= static_cast<float>(m.getValue());
     return *this;
 }
 
@@ -334,6 +360,16 @@ const IntType& IntType::powInternal( int y ) const
     std::cout << "\n \x1B[36m... call powInternal (" << this->getValue() <<" , int " << y << " ) >  \x1B[0m .. \n";
 
     return *this; 
+}
+
+IntType& IntType::pow ( float f_ ) 
+{ 
+    IntType::pow( static_cast<int>(f_) ); return *this;  
+}
+
+IntType& IntType::pow ( double d_ ) 
+{ 
+    IntType::pow( static_cast<int>(d_) ); return *this;  
 }
 
 IntType& IntType::add ( const int y )
@@ -389,7 +425,7 @@ int main()
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( static_cast<int>(2) ) << std::endl; 
     std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( static_cast<double>(0.5) ) << std::endl; 
-    std::cout << "FloatType pow ( DoubleType with value of " << it.getValue() << " ) = " << ft.pow( dt ) << std::endl; 
+    std::cout << "FloatType pow ( DoubleType with value of " << it.getValue() << " ) = " << ft.pow( static_cast<float>(dt)) << std::endl; 
     std::cout << "FloatType pow (IntType with value of " << it.getValue() << " ) = " << ft.pow ( it ) << std::endl;
     std::cout << "FloatType pow ( FloatType with value of " << ft.getValue() << " ) = " << ft.pow( ft ) << std::endl; 
     std::cout << "FloatType pow ( IntType with value of " << it.getValue() << " ) = " << ft.pow( it ) << std::endl; 
