@@ -117,13 +117,13 @@ public:
     FloatType& multiply ( float );
     FloatType& divide ( float );
     FloatType& pow ( float );
-    FloatType& pow ( double ); 
-    FloatType& pow ( int );
+    FloatType& pow ( double );  FIXME remove this function
+    FloatType& pow ( int );     FIXME remove this function
 
-    operator float() { return getValue(); }
+    operator float() { return getValue(); } FIXME revert implementation.
     
     const FloatType& powInternal( float ) const;
-    float getValue() const { return *pointerToFloatValue; }
+    float getValue() const { return *pointerToFloatValue; } FIXME remove this function
 };
 
 
@@ -150,7 +150,7 @@ FloatType& FloatType::pow ( float x )
 
 const FloatType& FloatType::powInternal( float y ) const
 { 
-    *pointerToFloatValue = static_cast<float>( std::pow( this->getValue() , y ));
+    *pointerToFloatValue = static_cast<float>( std::pow( this->getValue() , y )); FIXME they're already floats, no need to cast.
 
     std::cout << "\n \x1B[36m... call powInternal ( float ) > \x1B[0m .. \n";
 
@@ -159,7 +159,7 @@ const FloatType& FloatType::powInternal( float y ) const
 
 FloatType& FloatType::pow ( double d_ ) 
 {
-    FloatType::pow( static_cast<float>(d_) ); return *this;  
+    FloatType::pow( static_cast<float>(d_) ); return *this;  FIXME formatting.
 }
 
 FloatType& FloatType::pow ( int i_ ) 
@@ -221,13 +221,13 @@ public:
     DoubleType& multiply ( double );
     DoubleType& divide ( double );
     DoubleType& pow ( double );
-    DoubleType& pow ( float );
-    DoubleType& pow ( int );
+    DoubleType& pow ( float );FIXME remove this function
+    DoubleType& pow ( int );FIXME remove this function
 
-    operator float() { return static_cast<float>(getValue()); }
+    operator float() { return static_cast<float>(getValue()); } FIXME revert to previous implementation
 
     const DoubleType& powInternal( double ) const;
-    double getValue() const { return *pointerToDoubleValue;} 
+    double getValue() const { return *pointerToDoubleValue;} FIXME remove this function
 };
 
 Point::Point( const DoubleType& dt) : 
@@ -323,13 +323,13 @@ public:
     IntType& multiply ( int );
     IntType& divide ( int );
     IntType& pow ( int );
-    IntType& pow ( float ); 
-    IntType& pow ( double ); 
+    IntType& pow ( float ); FIXME remove this function
+    IntType& pow ( double ); FIXME remove this function
 
-    operator float() { return static_cast<float>(getValue()); }
+    operator float() { return static_cast<float>(getValue()); } FIXME revert to previous implementation
 
     const IntType& powInternal( int ) const;
-    int getValue() const { return *pointerToIntValue;} 
+    int getValue() const { return *pointerToIntValue;} FIXME remove this function
 };
 
 Point::Point( const IntType& it) : 
@@ -415,7 +415,7 @@ int main()
     DoubleType dt ( 0.5 );
     IntType it ( 2 ) ;
 
-    std::vector<Point*> somePoints;
+    std::vector<Point*> somePoints; FIXME Where are you deallocating these Points that you allocated on the heap?
 
     for (float x=1 ; x<5.0f; x+=0.5f) 
     { 
