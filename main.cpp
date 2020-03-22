@@ -111,6 +111,8 @@ public:
     FloatType& divide ( float );
 
     const FloatType& pow ( float );
+    const FloatType& pow ( double d_ ) { return pow(static_cast<float>(d_)); }
+    const FloatType& pow ( int i_ ) { return pow(static_cast<float>(i_)); }
     const FloatType& pow (  FloatType& );
     const FloatType& pow (  DoubleType& );
     const FloatType& pow (  IntType& );
@@ -178,6 +180,8 @@ public:
     DoubleType& divide ( double );
 
     const DoubleType& pow ( double );
+    const DoubleType& pow ( float f_ ) { return pow(static_cast<double>(f_)); }
+    const DoubleType& pow ( int i_ ) { return pow(static_cast<double>(i_)); }
     const DoubleType& pow ( FloatType& );
     const DoubleType& pow ( DoubleType& );
     const DoubleType& pow ( IntType& );
@@ -240,6 +244,8 @@ public:
     IntType& divide ( int );
 
     const IntType& pow ( int );
+    const IntType& pow ( float f_ )  { return pow(static_cast<int>(f_)); }
+    const IntType& pow ( double d_ ) { return pow(static_cast<int>(d_)); }
     const IntType& pow (  FloatType& );
     const IntType& pow (  DoubleType& );
     const IntType& pow (  IntType& );
@@ -434,9 +440,9 @@ int main()
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( 2 ) << std::endl; 
     std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( 0.5 ) << std::endl; 
-    std::cout << "FloatType pow ( DoubleType with value of " << dt << " ) = " << ft.pow( static_cast<float>(dt)) << std::endl; 
-    std::cout << "FloatType pow (IntType with value of " << static_cast<int>(it) << " ) = " << ft.pow ( it ) << std::endl;
-    std::cout << "FloatType pow ( FloatType with value of " << static_cast<int>(ft) << " ) = " << ft.pow( ft ) << std::endl; 
+    std::cout << "FloatType pow ( DoubleType with value of " << dt << " ) = " << ft.pow( static_cast<float>(dt) ) << std::endl; 
+    std::cout << "FloatType pow (IntType with value of " << it << " ) = " << ft.pow ( it ) << std::endl;
+    std::cout << "FloatType pow ( FloatType with value of " << ft << " ) = " << ft.pow( ft ) << std::endl; 
 
     std::cout << "FloatType add result=" <<  ft.add( 2 )  << std::endl;
     std::cout << "FloatType subtract result=" << ft.subtract( 2.0f )  << std::endl;
@@ -444,23 +450,23 @@ int main()
     std::cout << "FloatType divide result=" <<  ft.divide( 16.0f) << div << std::endl;
 
     std::cout << "DoubleType pow ( 2.5 ) = " << dt.pow( 2.5 ) << std::endl; 
-    std::cout << "DoubleType pow ( 2 ) = " << dt.pow( static_cast<int>(2) ) << std::endl; 
+    std::cout << "DoubleType pow ( 2 ) = " << dt.pow( 2 ) << std::endl; 
     std::cout << "DoubleType pow ( 0.5f ) = " << dt.pow(0.5 ) << std::endl; 
-    std::cout << "DoubleType pow ( FloatType with value of " << static_cast<float>(ft) << ") /1000 = " << dt.pow( ft.divide(1000) ) << std::endl; 
-    std::cout << "DoubleType pow (IntType with value of " << static_cast<int>(it) << " ) = " << dt.pow ( it ) << std::endl;
-    std::cout << "DoubleType pow ( DoubleType with value of " << static_cast<double>(dt) << " ) = " << dt.pow( dt ) << std::endl; 
+    std::cout << "DoubleType pow ( FloatType with value of " << ft << ") /1000 = " << dt.pow( ft.divide(1000) ) << std::endl; 
+    std::cout << "DoubleType pow (IntType with value of " << it << " ) = " << dt.pow ( it ) << std::endl;
+    std::cout << "DoubleType pow ( DoubleType with value of " << dt << " ) = " << dt.pow( dt ) << std::endl; 
 
     std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
     std::cout << "DoubleType subtract result=" << dt.subtract(2.0) << std::endl;
-    std::cout << "DoubleType multiply result=" << dt.multiply(static_cast<double>(2.5f)) << std::endl;
+    std::cout << "DoubleType multiply result=" << dt.multiply(2.5) << std::endl;
     std::cout << "DoubleType divide result=" << dt.divide(0.5) << div << std::endl;
 
-    std::cout << "IntType pow ( 2.5 ) = " << it.pow( static_cast<int>(2.5) ) << std::endl; 
-    std::cout << "IntType pow ( 2 ) = " << it.pow( static_cast<int>(2) ) << std::endl; 
+    std::cout << "IntType pow ( 2.5 ) = " << it.pow( 2.5 ) << std::endl; 
+    std::cout << "IntType pow ( 2 ) = " << it.pow(2) << std::endl; 
     std::cout << "IntType pow ( 4.0f ) = " << it.pow( 2.0f ) << std::endl; 
-    std::cout << "IntType pow ( FloatType with value of " << static_cast<float>(ft) << ") = " << it.pow( ft ) << std::endl; 
-    std::cout << "IntType pow (DoubleType with value of " << static_cast<float>(dt) << " ) = " << it.pow ( dt ) << std::endl;
-    std::cout << "IntType pow ( IntType with value of " << static_cast<int>(it) << " ) = " << it.pow( it ) << std::endl; 
+    std::cout << "IntType pow ( FloatType with value of " << ft << ") = " << it.pow( ft ) << std::endl; 
+    std::cout << "IntType pow (DoubleType with value of " << dt << " ) = " << it.pow ( dt ) << std::endl;
+    std::cout << "IntType pow ( IntType with value of " << it << " ) = " << it.pow( it ) << std::endl; 
     std::cout << "IntType add result=" << it.add( static_cast<int>(2.25f)) << std::endl;
     std::cout << "IntType subtract result=" << it.subtract(2) << std::endl;
     std::cout << "IntType multiply result=" << it.multiply(2) << std::endl;
