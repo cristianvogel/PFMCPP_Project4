@@ -66,24 +66,16 @@ struct FloatType;
 
 struct Point
 {
-    Point( float x_, float y_ ) : x{ x_ }, y{ y_ } 
-    {      
-    }
-
+    Point( float x_, float y_ ) : x{ x_ }, y{ y_ } {}
+ 
     Point( const FloatType& );
     Point( const DoubleType& );
     Point( const IntType& );
 
-    Point& multiply(float m)
-    {
-        x *= m;
-        y *= m;
-        return *this;
-    }
-
-    Point& multiply(FloatType& m);
-    Point& multiply(DoubleType& m);
-    Point& multiply(IntType& m);
+    Point& multiply(float);
+    Point& multiply(const FloatType& m);
+    Point& multiply(const DoubleType& m);
+    Point& multiply(const IntType& m);
 
     std::string toString() 
     { 
@@ -99,6 +91,7 @@ struct FloatType
 {
 private:
     float* pointerToFloatValue = nullptr;
+    const FloatType& powInternal( float );
 
 public:
     FloatType(float floatIn )
@@ -116,56 +109,18 @@ public:
     FloatType& subtract ( float );
     FloatType& multiply ( float );
     FloatType& divide ( float );
-    FloatType& pow ( float );
-    FloatType& pow ( double );  FIXME remove this function
-    FloatType& pow ( int );     FIXME remove this function
 
-    operator float() { return getValue(); } FIXME revert implementation.
+    const FloatType& pow ( float );
+    const FloatType& pow (  FloatType& );
+    const FloatType& pow (  DoubleType& );
+    const FloatType& pow (  IntType& );
+    // FloatType& pow ( double ); // FIXME remove this function
+    // FloatType& pow ( int );    // FIXME remove this function
+
+    operator float() const { return *pointerToFloatValue; } // FIXME revert implementation.
     
-    const FloatType& powInternal( float ) const;
-    float getValue() const { return *pointerToFloatValue; } FIXME remove this function
 };
 
-
-Point::Point( const FloatType& ft) : 
-    x{ ft.getValue() } , 
-    y{ ft.getValue() } 
-{    
-}
-
-Point& Point::multiply( FloatType& m) 
-{
-    x *= m.getValue();
-    y *= m.getValue();
-    return *this;
-}
-
-FloatType& FloatType::pow ( float x )
-{
-    FloatType::powInternal( x );
-
-    std::cout << "\x1B[33m.. Call to pow ( float ) \x1B[0m result: ";
-    return *this;
-}
-
-const FloatType& FloatType::powInternal( float y ) const
-{ 
-    *pointerToFloatValue = static_cast<float>( std::pow( this->getValue() , y )); FIXME they're already floats, no need to cast.
-
-    std::cout << "\n \x1B[36m... call powInternal ( float ) > \x1B[0m .. \n";
-
-    return *this; 
-}
-
-FloatType& FloatType::pow ( double d_ ) 
-{
-    FloatType::pow( static_cast<float>(d_) ); return *this;  FIXME formatting.
-}
-
-FloatType& FloatType::pow ( int i_ ) 
-{ 
-    FloatType::pow( static_cast<float>(i_) ); return *this;  
-}
 
 FloatType& FloatType::add ( float x )
 {
@@ -203,6 +158,7 @@ struct DoubleType
 {
 private:
     double* pointerToDoubleValue = nullptr;
+    const DoubleType& powInternal( double );
 
 public:
     DoubleType(double doubleIn )
@@ -220,56 +176,15 @@ public:
     DoubleType& subtract ( double );
     DoubleType& multiply ( double );
     DoubleType& divide ( double );
-    DoubleType& pow ( double );
-    DoubleType& pow ( float );FIXME remove this function
-    DoubleType& pow ( int );FIXME remove this function
 
-    operator float() { return static_cast<float>(getValue()); } FIXME revert to previous implementation
+    const DoubleType& pow ( double );
+    const DoubleType& pow ( FloatType& );
+    const DoubleType& pow ( DoubleType& );
+    const DoubleType& pow ( IntType& );
 
-    const DoubleType& powInternal( double ) const;
-    double getValue() const { return *pointerToDoubleValue;} FIXME remove this function
+    operator double() const { return *pointerToDoubleValue; } //FIXME revert to previous implementation
+
 };
-
-Point::Point( const DoubleType& dt) : 
-    x{ static_cast<float>(dt.getValue()) } , 
-    y{ static_cast<float>(dt.getValue()) } 
-{      
-}
-
-Point& Point::multiply( DoubleType& m) 
-{
-    x *= static_cast<float>(m.getValue());
-    y *= static_cast<float>(m.getValue());
-    return *this;
-}
-
-DoubleType& DoubleType::pow ( double x )
-{
-    DoubleType::powInternal( x );
-
-    std::cout << "\x1B[33m.. Call to pow ( double ) \x1B[0m result: ";
-    return *this;
-}
-
-const DoubleType& DoubleType::powInternal( double y ) const
-{ 
-    *pointerToDoubleValue = static_cast<double>( std::pow( this->getValue() , y ));
-
-    std::cout << "\n \x1B[36m... call powInternal ( double ) > \x1B[0m .. \n";
-
-    return *this; 
-}
-
-DoubleType& DoubleType::pow ( float d_ ) 
-{
-    DoubleType::pow( static_cast<double>(d_) ); return *this;  
-}
-
-DoubleType& DoubleType::pow ( int i_ ) 
-{ 
-    DoubleType::pow( static_cast<double>(i_) ); return *this;  
-}
-
 DoubleType& DoubleType::add ( const double y)
 {
     *pointerToDoubleValue += y;
@@ -306,7 +221,8 @@ struct IntType
 {
 private:
     int* pointerToIntValue = nullptr;
-   
+    const IntType& powInternal( int );
+
 public:
     IntType( int intIn )
     {
@@ -322,55 +238,15 @@ public:
     IntType& subtract ( int );
     IntType& multiply ( int );
     IntType& divide ( int );
-    IntType& pow ( int );
-    IntType& pow ( float ); FIXME remove this function
-    IntType& pow ( double ); FIXME remove this function
 
-    operator float() { return static_cast<float>(getValue()); } FIXME revert to previous implementation
+    const IntType& pow ( int );
+    const IntType& pow (  FloatType& );
+    const IntType& pow (  DoubleType& );
+    const IntType& pow (  IntType& );
 
-    const IntType& powInternal( int ) const;
-    int getValue() const { return *pointerToIntValue;} FIXME remove this function
+    operator int() const { return *pointerToIntValue; } //FIXME revert to previous implementation
 };
 
-Point::Point( const IntType& it) : 
-    x{ static_cast<float>(it.getValue()) } , 
-    y{ static_cast<float>(it.getValue()) } 
-{      
-}
-
-Point& Point::multiply( IntType& m) 
-{
-    x *= static_cast<float>(m.getValue());
-    y *= static_cast<float>(m.getValue());
-    return *this;
-}
-
-IntType& IntType::pow ( int x )
-{
-    IntType::powInternal( x );
-
-    std::cout << "\x1B[33m.. Call to pow ( int )  \x1B[0m result: ";
-    return *this;
-}
-
-const IntType& IntType::powInternal( int y ) const
-{ 
-    *pointerToIntValue = static_cast<int>( std::pow( this->getValue() , y ));
-
-    std::cout << "\n \x1B[36m... call powInternal (" << this->getValue() <<" , int " << y << " ) >  \x1B[0m .. \n";
-
-    return *this; 
-}
-
-IntType& IntType::pow ( float f_ ) 
-{ 
-    IntType::pow( static_cast<int>(f_) ); return *this;  
-}
-
-IntType& IntType::pow ( double d_ ) 
-{ 
-    IntType::pow( static_cast<int>(d_) ); return *this;  
-}
 
 IntType& IntType::add ( const int y )
 {
@@ -404,8 +280,141 @@ IntType& IntType::divide ( const int y )
     return *this;
 }
 
+// Pow Implementations
+
+const FloatType& FloatType::pow ( float x )
+{
+    FloatType::powInternal( x );
+    return *this;
+}
+
+const FloatType& FloatType::pow ( FloatType& ft ) 
+{
+    FloatType::powInternal( static_cast<float>(ft) );
+    return *this;
+}
+
+const FloatType& FloatType::pow ( IntType& it ) 
+{
+    FloatType::powInternal( static_cast<float>(it) );
+    return *this;
+}
+
+const DoubleType& DoubleType::pow ( double x )
+{
+    DoubleType::powInternal( x );
+    return *this;
+}
+
+const DoubleType& DoubleType::pow ( DoubleType& dt )
+{
+    DoubleType::powInternal( static_cast<double>(dt) );
+    return *this;
+}
+
+const DoubleType& DoubleType::pow ( FloatType& ft )
+{
+    DoubleType::powInternal( static_cast<double>(ft) );
+    return *this;
+}
+
+const DoubleType& DoubleType::pow ( IntType& it )
+{
+    DoubleType::powInternal( static_cast<double>(it) );
+    return *this;
+}
+
+const IntType& IntType::pow ( int x )
+{
+    IntType::powInternal( x );
+    return *this;
+}
+
+const IntType& IntType::pow ( IntType& it ) 
+{
+    IntType::powInternal( static_cast<int>(it) );
+    return *this;
+}
+
+const IntType& IntType::pow ( FloatType& ft ) 
+{
+    IntType::powInternal( static_cast<int>(ft) );
+    return *this;
+}
+
+const IntType& IntType::pow ( DoubleType& dt ) 
+{
+    IntType::powInternal( static_cast<int>(dt) );
+    return *this;
+}
+
+const FloatType& FloatType::powInternal( float y )
+{ 
+    if (pointerToFloatValue != nullptr)
+    {
+        *pointerToFloatValue = std::pow( *pointerToFloatValue , y ); 
+    }
+    return *this; 
+}
+
+const IntType& IntType::powInternal( int y )
+{ 
+    if (pointerToIntValue != nullptr)
+    {
+        *pointerToIntValue = static_cast<int>( std::pow( *pointerToIntValue , y ));
+    }
+    return *this; 
+}
+
+const DoubleType& DoubleType::powInternal( double y ) 
+{ 
+    if (pointerToDoubleValue != nullptr)
+    {
+        *pointerToDoubleValue = static_cast<double>( std::pow( *pointerToDoubleValue , y ));
+    }
+    return *this; 
+}
+
+// Point UDT constructors
+
+Point::Point( const FloatType& ft) : Point(ft, ft)
+{    
+}
+
+Point::Point( const DoubleType& dt) : Point(static_cast<float>(dt), static_cast<float>(dt) )
+{       
+}
+
+Point::Point( const IntType& it) : Point(static_cast<float>(it), static_cast<float>(it))
+{      
+}
+
+// Point Implementations 
+
+Point& Point::multiply(float m)
+{
+    x *= m;
+    y *= m;
+    return *this;
+}
+
+Point& Point::multiply( const FloatType& m) 
+{
+    return multiply(static_cast<float>(m));
+}
+
+Point& Point::multiply( const DoubleType& m)
+{
+    return multiply(static_cast<float>(m));
+}
+
+Point& Point::multiply( const IntType& m) 
+{
+    return multiply(static_cast<float>(m));
+}
+
 #include <iostream>
-#include <typeinfo> // for typeid()
+#include <memory>
 
 int main()
 {   
@@ -413,22 +422,21 @@ int main()
     //assign heap primitives
     FloatType ft ( 2.0f );
     DoubleType dt ( 0.5 );
-    IntType it ( 2 ) ;
+    IntType it ( 2 );
+    
+    std::vector<Point*> somePoints;
 
-    std::vector<Point*> somePoints; FIXME Where are you deallocating these Points that you allocated on the heap?
-
-    for (float x=1 ; x<5.0f; x+=0.5f) 
+    for (float x=1; x<5.0f; x+=0.5f) 
     { 
         somePoints.push_back( new Point( x, x * 1.618f ));
     }
 
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
-    std::cout << "FloatType pow ( 2 ) = " << ft.pow( static_cast<int>(2) ) << std::endl; 
-    std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( static_cast<double>(0.5) ) << std::endl; 
-    std::cout << "FloatType pow ( DoubleType with value of " << it.getValue() << " ) = " << ft.pow( static_cast<float>(dt)) << std::endl; 
-    std::cout << "FloatType pow (IntType with value of " << it.getValue() << " ) = " << ft.pow ( it ) << std::endl;
-    std::cout << "FloatType pow ( FloatType with value of " << ft.getValue() << " ) = " << ft.pow( ft ) << std::endl; 
-    std::cout << "FloatType pow ( IntType with value of " << it.getValue() << " ) = " << ft.pow( it ) << std::endl; 
+    std::cout << "FloatType pow ( 2 ) = " << ft.pow( 2 ) << std::endl; 
+    std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( 0.5 ) << std::endl; 
+    std::cout << "FloatType pow ( DoubleType with value of " << dt << " ) = " << ft.pow( static_cast<float>(dt)) << std::endl; 
+    std::cout << "FloatType pow (IntType with value of " << static_cast<int>(it) << " ) = " << ft.pow ( it ) << std::endl;
+    std::cout << "FloatType pow ( FloatType with value of " << static_cast<int>(ft) << " ) = " << ft.pow( ft ) << std::endl; 
 
     std::cout << "FloatType add result=" <<  ft.add( 2 )  << std::endl;
     std::cout << "FloatType subtract result=" << ft.subtract( 2.0f )  << std::endl;
@@ -437,22 +445,22 @@ int main()
 
     std::cout << "DoubleType pow ( 2.5 ) = " << dt.pow( 2.5 ) << std::endl; 
     std::cout << "DoubleType pow ( 2 ) = " << dt.pow( static_cast<int>(2) ) << std::endl; 
-    std::cout << "DoubleType pow ( 0.5f ) = " << dt.pow( 0.5f ) << std::endl; 
-    std::cout << "DoubleType pow ( FloatType with value of " << ft.getValue() << ") /1000 = " << dt.pow( ft.divide(1000) ) << std::endl; 
-    std::cout << "DoubleType pow (IntType with value of " << it.getValue() << " ) = " << dt.pow ( it ) << std::endl;
-    std::cout << "DoubleType pow ( DoubleType with value of " << dt.getValue() << " ) = " << dt.pow( dt ) << std::endl; 
+    std::cout << "DoubleType pow ( 0.5f ) = " << dt.pow(0.5 ) << std::endl; 
+    std::cout << "DoubleType pow ( FloatType with value of " << static_cast<float>(ft) << ") /1000 = " << dt.pow( ft.divide(1000) ) << std::endl; 
+    std::cout << "DoubleType pow (IntType with value of " << static_cast<int>(it) << " ) = " << dt.pow ( it ) << std::endl;
+    std::cout << "DoubleType pow ( DoubleType with value of " << static_cast<double>(dt) << " ) = " << dt.pow( dt ) << std::endl; 
 
     std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
     std::cout << "DoubleType subtract result=" << dt.subtract(2.0) << std::endl;
     std::cout << "DoubleType multiply result=" << dt.multiply(static_cast<double>(2.5f)) << std::endl;
     std::cout << "DoubleType divide result=" << dt.divide(0.5) << div << std::endl;
 
-    std::cout << "IntType pow ( 2.5 ) = " << it.pow( 2.5 ) << std::endl; 
+    std::cout << "IntType pow ( 2.5 ) = " << it.pow( static_cast<int>(2.5) ) << std::endl; 
     std::cout << "IntType pow ( 2 ) = " << it.pow( static_cast<int>(2) ) << std::endl; 
     std::cout << "IntType pow ( 4.0f ) = " << it.pow( 2.0f ) << std::endl; 
-    std::cout << "IntType pow ( FloatType with value of " << ft.getValue() << ") = " << it.pow( ft ) << std::endl; 
-    std::cout << "IntType pow (DoubleType with value of " << dt.getValue() << " ) = " << it.pow ( dt ) << std::endl;
-    std::cout << "IntType pow ( IntType with value of " << it.getValue() << " ) = " << it.pow( it ) << std::endl; 
+    std::cout << "IntType pow ( FloatType with value of " << static_cast<float>(ft) << ") = " << it.pow( ft ) << std::endl; 
+    std::cout << "IntType pow (DoubleType with value of " << static_cast<float>(dt) << " ) = " << it.pow ( dt ) << std::endl;
+    std::cout << "IntType pow ( IntType with value of " << static_cast<int>(it) << " ) = " << it.pow( it ) << std::endl; 
     std::cout << "IntType add result=" << it.add( static_cast<int>(2.25f)) << std::endl;
     std::cout << "IntType subtract result=" << it.subtract(2) << std::endl;
     std::cout << "IntType multiply result=" << it.multiply(2) << std::endl;
@@ -468,6 +476,6 @@ int main()
         std::cout << "\x1B[36m Point " << p->toString() << " multiplication with DoubleType > Point \x1B[0m" << (p->multiply( dt )).toString() << std::endl;
         std::cout << "\x1B[36m Point " << p->toString() << " multiplication with IntType > Point \x1B[0m" << (p->multiply( it )).toString() << std::endl;
     }
-
+    
     std::cout << "good to go!" << std::endl;
 }
