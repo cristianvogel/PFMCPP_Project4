@@ -118,7 +118,7 @@ public:
     const FloatType& pow (  IntType& );
 
     operator float() const { return *pointerToFloatValue; } 
-    
+
 };
 
 
@@ -142,15 +142,11 @@ FloatType& FloatType::multiply ( const float y)
 
 FloatType& FloatType::divide ( const float y ) 
 { 
-    if (std::abs(y) > 0) 
+    *pointerToFloatValue /= y;
+    if ( !(std::abs(y) > 0) ) 
     {
-       *pointerToFloatValue /= y;
-    } 
-    else 
-    { 
         std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
-    }
-    
+    }   
     return *this;      
 }
 
@@ -286,69 +282,70 @@ IntType& IntType::divide ( const int y )
 
 // Pow Implementations
 
+
 const FloatType& FloatType::pow ( float x )
 {
-    FloatType::powInternal( x );
+    powInternal( x );
     return *this;
 }
 
 const FloatType& FloatType::pow ( FloatType& ft ) 
 {
-    FloatType::powInternal( static_cast<float>(ft) );
+    powInternal( static_cast<float>(ft) );
     return *this;
 }
 
 const FloatType& FloatType::pow ( IntType& it ) 
 {
-    FloatType::powInternal( static_cast<float>(it) );
+    powInternal( static_cast<float>(it) );
     return *this;
 }
 
 const DoubleType& DoubleType::pow ( double x )
 {
-    DoubleType::powInternal( x );
+    powInternal( x );
     return *this;
 }
 
 const DoubleType& DoubleType::pow ( DoubleType& dt )
 {
-    DoubleType::powInternal( static_cast<double>(dt) );
+    powInternal( static_cast<double>(dt) );
     return *this;
 }
 
 const DoubleType& DoubleType::pow ( FloatType& ft )
 {
-    DoubleType::powInternal( static_cast<double>(ft) );
+    powInternal( static_cast<double>(ft) );
     return *this;
 }
 
 const DoubleType& DoubleType::pow ( IntType& it )
 {
-    DoubleType::powInternal( static_cast<double>(it) );
+    powInternal( static_cast<double>(it) );
     return *this;
 }
 
 const IntType& IntType::pow ( int x )
 {
-    IntType::powInternal( x );
+    powInternal( x );
     return *this;
 }
 
 const IntType& IntType::pow ( IntType& it ) 
 {
-    IntType::powInternal( static_cast<int>(it) );
+    powInternal( static_cast<int>(it) );
     return *this;
 }
 
 const IntType& IntType::pow ( FloatType& ft ) 
 {
-    IntType::powInternal( static_cast<int>(ft) );
+    powInternal( static_cast<int>(ft) );
     return *this;
 }
 
 const IntType& IntType::pow ( DoubleType& dt ) 
 {
-    IntType::powInternal( static_cast<int>(dt) );
+    powInternal( static_cast<int>(dt) );
     return *this;
 }
 
