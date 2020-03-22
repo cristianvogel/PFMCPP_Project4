@@ -203,6 +203,7 @@ DoubleType& DoubleType::multiply ( const double y)
 
 DoubleType& DoubleType::divide ( const double y) 
 { 
+    FIXME: DRY Refactor this
     if (std::abs(y) > 0) 
     { 
         *pointerToDoubleValue /= y; 
