@@ -116,10 +116,8 @@ public:
     const FloatType& pow (  FloatType& );
     const FloatType& pow (  DoubleType& );
     const FloatType& pow (  IntType& );
-    // FloatType& pow ( double ); // FIXME remove this function
-    // FloatType& pow ( int );    // FIXME remove this function
 
-    operator float() const { return *pointerToFloatValue; } // FIXME revert implementation.
+    operator float() const { return *pointerToFloatValue; } 
     
 };
 
@@ -186,7 +184,7 @@ public:
     const DoubleType& pow ( DoubleType& );
     const DoubleType& pow ( IntType& );
 
-    operator double() const { return *pointerToDoubleValue; } //FIXME revert to previous implementation
+    operator double() const { return *pointerToDoubleValue; } 
 
 };
 DoubleType& DoubleType::add ( const double y)
@@ -250,7 +248,7 @@ public:
     const IntType& pow (  DoubleType& );
     const IntType& pow (  IntType& );
 
-    operator int() const { return *pointerToIntValue; } //FIXME revert to previous implementation
+    operator int() const { return *pointerToIntValue; } 
 };
 
 
@@ -381,7 +379,7 @@ const DoubleType& DoubleType::powInternal( double y )
     return *this; 
 }
 
-// Point UDT constructors
+// Point UDT forwarding constructors
 
 Point::Point( const FloatType& ft) : Point(ft, ft)
 {    
@@ -473,7 +471,7 @@ int main()
 
     // some Point calculations
     std::cout << "\x1B[36m Point " << p1.toString() << " multiplication with FloatType > Point \x1B[0m" << (p1.multiply( ft )).toString() << std::endl;
-    std::cout << "\x1B[36m Point " << p1.toString() << " multiplication with DoubleType > Point \x1B[0m" << (p2.multiply( dt )).toString() << std::endl;
+    std::cout << "\x1B[36m Point " << p2.toString() << " multiplication with DoubleType > Point \x1B[0m" << (p2.multiply( dt )).toString() << std::endl;
     std::cout << "\x1B[36m Point " << p1.toString() << " multiplication with IntType > Point \x1B[0m" << (p1.multiply( it )).toString() << std::endl;
     
     
