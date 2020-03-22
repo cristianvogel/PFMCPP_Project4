@@ -203,16 +203,11 @@ DoubleType& DoubleType::multiply ( const double y)
 
 DoubleType& DoubleType::divide ( const double y) 
 { 
-    FIXME: DRY Refactor this
-    if (std::abs(y) > 0) 
+    *pointerToDoubleValue /= y; 
+    if (!(std::abs(y) > 0)) 
     { 
-        *pointerToDoubleValue /= y; 
-    } 
-    else 
-    {
         std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl;
-        *pointerToDoubleValue /= y; 
-    }   
+    } 
     return *this;      
 }
 
@@ -299,6 +294,12 @@ const FloatType& FloatType::pow ( FloatType& ft )
 const FloatType& FloatType::pow ( IntType& it ) 
 {
     powInternal( static_cast<float>(it) );
+    return *this;
+}
+
+const FloatType& FloatType::pow ( DoubleType& dt ) 
+{
+    powInternal( static_cast<float>(dt) );
     return *this;
 }
 
@@ -432,7 +433,7 @@ int main()
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( 2 ) << std::endl; 
     std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( 0.5 ) << std::endl; 
-    std::cout << "FloatType pow ( DoubleType with value of " << dt << " ) = " << ft.pow( static_cast<float>(dt) ) << std::endl; 
+    std::cout << "FloatType pow ( DoubleType with value of " << dt << " ) = " << ft.pow( dt ) << std::endl; 
     std::cout << "FloatType pow (IntType with value of " << it << " ) = " << ft.pow ( it ) << std::endl;
     std::cout << "FloatType pow ( FloatType with value of " << ft << " ) = " << ft.pow( ft ) << std::endl; 
 
@@ -451,7 +452,7 @@ int main()
     std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
     std::cout << "DoubleType subtract result=" << dt.subtract(2.0) << std::endl;
     std::cout << "DoubleType multiply result=" << dt.multiply(2.5) << std::endl;
-    std::cout << "DoubleType divide result=" << dt.divide(0.5) << div << std::endl;
+    std::cout << "DoubleType divide result=" << dt.divide(1.5) << div << std::endl;
 
     std::cout << "IntType pow ( 2.5 ) = " << it.pow( 2.5 ) << std::endl; 
     std::cout << "IntType pow ( 2 ) = " << it.pow(2) << std::endl; 
@@ -459,7 +460,7 @@ int main()
     std::cout << "IntType pow ( FloatType with value of " << ft << ") = " << it.pow( ft ) << std::endl; 
     std::cout << "IntType pow (DoubleType with value of " << dt << " ) = " << it.pow ( dt ) << std::endl;
     std::cout << "IntType pow ( IntType with value of " << it << " ) = " << it.pow( it ) << std::endl; 
-    std::cout << "IntType add result=" << it.add( static_cast<int>(2.25f)) << std::endl;
+    std::cout << "IntType add result=" << it.add(8) << std::endl;
     std::cout << "IntType subtract result=" << it.subtract(2) << std::endl;
     std::cout << "IntType multiply result=" << it.multiply(2) << std::endl;
     std::cout << "IntType divide result=" << it.divide(0) << std::endl << std::endl;
