@@ -58,7 +58,6 @@ send me a DM to check your pull request
 #include <cmath> 
 #include <iostream> 
 #include <string>
-#include <vector>
 
 struct IntType;
 struct DoubleType;
@@ -91,7 +90,7 @@ struct FloatType
 {
 private:
     float* pointerToFloatValue = nullptr;
-    const FloatType& powInternal( float );
+    void powInternal( float );
 
 public:
     FloatType(float floatIn )
@@ -143,7 +142,7 @@ FloatType& FloatType::multiply ( const float y)
 FloatType& FloatType::divide ( const float y ) 
 { 
     *pointerToFloatValue /= y;
-    if ( !(std::abs(y) > 0) ) 
+    if (std::abs(y) <= 1e-32f ) //smallest 32-bit non-zero number
     {
         std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
     }   
@@ -154,7 +153,7 @@ struct DoubleType
 {
 private:
     double* pointerToDoubleValue = nullptr;
-    const DoubleType& powInternal( double );
+    void powInternal( double );
 
 public:
     DoubleType(double doubleIn )
@@ -204,7 +203,7 @@ DoubleType& DoubleType::multiply ( const double y)
 DoubleType& DoubleType::divide ( const double y) 
 { 
     *pointerToDoubleValue /= y; 
-    if (!(std::abs(y) > 0)) 
+    if (std::abs(y) <= 1e-32) //smallest 32-bit non-zero number
     { 
         std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl;
     } 
@@ -215,7 +214,7 @@ struct IntType
 {
 private:
     int* pointerToIntValue = nullptr;
-    const IntType& powInternal( int );
+    void powInternal( int );
 
 public:
     IntType( int intIn )
@@ -272,13 +271,10 @@ IntType& IntType::divide ( const int y )
     {
         std::cout << "\x1B[31m Cannot divide Int by Zero! \x1B[0m" << std::endl;
     }
-
     return *this;
 }
 
 // Pow Implementations
-
-
 const FloatType& FloatType::pow ( float x )
 {
     powInternal( x );
@@ -351,35 +347,31 @@ const IntType& IntType::pow ( DoubleType& dt )
     return *this;
 }
 
-const FloatType& FloatType::powInternal( float y )
+void FloatType::powInternal( float y )
 { 
     if (pointerToFloatValue != nullptr)
     {
         *pointerToFloatValue = std::pow( *pointerToFloatValue , y ); 
     }
-    return *this; 
 }
 
-const IntType& IntType::powInternal( int y )
+void IntType::powInternal( int y )
 { 
     if (pointerToIntValue != nullptr)
     {
         *pointerToIntValue = static_cast<int>( std::pow( *pointerToIntValue , y ));
     }
-    return *this; 
 }
 
-const DoubleType& DoubleType::powInternal( double y ) 
+void DoubleType::powInternal( double y ) 
 { 
     if (pointerToDoubleValue != nullptr)
     {
         *pointerToDoubleValue = static_cast<double>( std::pow( *pointerToDoubleValue , y ));
     }
-    return *this; 
 }
 
 // Point UDT forwarding constructors
-
 Point::Point( const FloatType& ft) : Point(ft, ft)
 {    
 }
@@ -423,13 +415,19 @@ int main()
 {   
     std::string div = "\n \x1B[35m ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ \x1B[0m \n";
     //assign heap primitives
-    FloatType ft ( 2.0f );
+    FloatType ftErrorTest ( 2.0f );
+    FloatType ft( 2.0f );
+
     DoubleType dt ( 0.5 );
+    DoubleType dtErrorTest ( 0.5 );
+
     IntType it ( 2 );
+    IntType itErrorTest ( 2 );
     
     Point p1 (2.0f, 20.0f);
     Point p2 (25.0f, 50.0f);
     
+    std::cout << "FloatType divide by zero test =" <<  ftErrorTest.divide( 0.0f) << div << std::endl;
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( 2 ) << std::endl; 
     std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( 0.5 ) << std::endl; 
@@ -440,8 +438,9 @@ int main()
     std::cout << "FloatType add result=" <<  ft.add( 2 )  << std::endl;
     std::cout << "FloatType subtract result=" << ft.subtract( 2.0f )  << std::endl;
     std::cout << "FloatType multiply result=" << ft.multiply( 2.0f ) << std::endl;
-    std::cout << "FloatType divide result=" <<  ft.divide( 16.0f) << div << std::endl;
+    std::cout << "FloatType divide result =" <<  ft.divide( 8.0f) << div << std::endl;
 
+    std::cout << "DoubleType divide by zero test =" <<  dtErrorTest.divide( 0 ) << div << std::endl;
     std::cout << "DoubleType pow ( 2.5 ) = " << dt.pow( 2.5 ) << std::endl; 
     std::cout << "DoubleType pow ( 2 ) = " << dt.pow( 2 ) << std::endl; 
     std::cout << "DoubleType pow ( 0.5f ) = " << dt.pow(0.5 ) << std::endl; 
@@ -452,8 +451,9 @@ int main()
     std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
     std::cout << "DoubleType subtract result=" << dt.subtract(2.0) << std::endl;
     std::cout << "DoubleType multiply result=" << dt.multiply(2.5) << std::endl;
-    std::cout << "DoubleType divide result=" << dt.divide(1.5) << div << std::endl;
+    std::cout << "DoubleType divide result=" << dt.divide(16) << div << std::endl;
 
+    std::cout << "IntType divide by zero test =" <<  itErrorTest.divide( 0 ) << div << std::endl;
     std::cout << "IntType pow ( 2.5 ) = " << it.pow( 2.5 ) << std::endl; 
     std::cout << "IntType pow ( 2 ) = " << it.pow(2) << std::endl; 
     std::cout << "IntType pow ( 4.0f ) = " << it.pow( 2.0f ) << std::endl; 
@@ -463,10 +463,10 @@ int main()
     std::cout << "IntType add result=" << it.add(8) << std::endl;
     std::cout << "IntType subtract result=" << it.subtract(2) << std::endl;
     std::cout << "IntType multiply result=" << it.multiply(2) << std::endl;
-    std::cout << "IntType divide result=" << it.divide(0) << std::endl << std::endl;
+    std::cout << "IntType divide result=" << it.divide(4) << std::endl << std::endl;
 
     //my example of a rounding loss causing an int divide by zero in the chain
-    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(static_cast<int>(0.125f)).subtract(10).add(100) ) << div << std::endl;
+    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(2).subtract(10).add(100) ) << div << std::endl;
 
     // some Point calculations
     std::cout << "\x1B[36m Point " << p1.toString() << " multiplication with FloatType > Point \x1B[0m" << (p1.multiply( ft )).toString() << std::endl;
