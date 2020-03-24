@@ -90,7 +90,7 @@ struct FloatType
 {
 private:
     float* pointerToFloatValue = nullptr;
-    void powInternal( float );
+    FloatType& powInternal( float );
 
 public:
     FloatType(float floatIn )
@@ -109,18 +109,83 @@ public:
     FloatType& multiply ( float );
     FloatType& divide ( float );
 
-    const FloatType& pow ( float );
-    const FloatType& pow ( double d_ ) { return pow(static_cast<float>(d_)); }
-    const FloatType& pow ( int i_ ) { return pow(static_cast<float>(i_)); }
-    const FloatType& pow (  FloatType& );
-    const FloatType& pow (  DoubleType& );
-    const FloatType& pow (  IntType& );
+    FloatType& pow ( const float );
+    FloatType& pow ( const double d_ ) { return pow(static_cast<float>(d_)); }
+    FloatType& pow ( const int i_ ) { return pow(static_cast<float>(i_)); }
+    FloatType& pow ( const FloatType& ft_ );
+    FloatType& pow ( const DoubleType& dt_ );
+    FloatType& pow ( const IntType& ); 
 
-    operator float() const { return *pointerToFloatValue; } 
+    operator float() const { return *pointerToFloatValue; }
+};
+
+struct IntType
+{
+private:
+    int* pointerToIntValue = nullptr;
+    IntType& powInternal( int );
+
+public:
+    IntType( int intIn )
+    {
+        pointerToIntValue = new int ( intIn );
+    }
+    ~IntType()
+    {
+        delete pointerToIntValue;
+        pointerToIntValue = nullptr;
+    }
+
+    IntType& add ( int );
+    IntType& subtract ( int );
+    IntType& multiply ( int );
+    IntType& divide ( int );
+
+    IntType& pow ( const int );
+    IntType& pow ( const float f_ )  { return pow(static_cast<int>(f_)); }
+    IntType& pow ( const double d_ ) { return pow(static_cast<int>(d_)); }
+    IntType& pow ( const FloatType& );
+    IntType& pow ( const DoubleType& );
+    IntType& pow ( const IntType& );
+
+    operator int() const { return *pointerToIntValue; } 
+};
+
+struct DoubleType
+{
+private:
+    double* pointerToDoubleValue = nullptr;
+    DoubleType& powInternal( double );
+
+public:
+    DoubleType(double doubleIn )
+    {
+        pointerToDoubleValue = new double( doubleIn );
+    }
+    
+    ~DoubleType()
+    {
+        delete pointerToDoubleValue;
+        pointerToDoubleValue = nullptr;
+    }
+
+    DoubleType& add ( double );
+    DoubleType& subtract ( double );
+    DoubleType& multiply ( double );
+    DoubleType& divide ( double );
+
+    DoubleType& pow ( const double );
+    DoubleType& pow ( const float f_ ) { return pow(static_cast<double>(f_)); }
+    DoubleType& pow ( const int i_ ) { return pow(static_cast<double>(i_)); }
+    DoubleType& pow ( const FloatType& );
+    DoubleType& pow ( const DoubleType& );
+    DoubleType& pow ( const IntType& );
+
+    operator double() const { return *pointerToDoubleValue; } 
 
 };
 
-
+//out of line implementations
 FloatType& FloatType::add ( float x )
 {
     *pointerToFloatValue += x;
@@ -149,39 +214,6 @@ FloatType& FloatType::divide ( const float y )
     return *this;      
 }
 
-struct DoubleType
-{
-private:
-    double* pointerToDoubleValue = nullptr;
-    void powInternal( double );
-
-public:
-    DoubleType(double doubleIn )
-    {
-        pointerToDoubleValue = new double( doubleIn );
-    }
-    
-    ~DoubleType()
-    {
-        delete pointerToDoubleValue;
-        pointerToDoubleValue = nullptr;
-    }
-
-    DoubleType& add ( double );
-    DoubleType& subtract ( double );
-    DoubleType& multiply ( double );
-    DoubleType& divide ( double );
-
-    const DoubleType& pow ( double );
-    const DoubleType& pow ( float f_ ) { return pow(static_cast<double>(f_)); }
-    const DoubleType& pow ( int i_ ) { return pow(static_cast<double>(i_)); }
-    const DoubleType& pow ( FloatType& );
-    const DoubleType& pow ( DoubleType& );
-    const DoubleType& pow ( IntType& );
-
-    operator double() const { return *pointerToDoubleValue; } 
-
-};
 DoubleType& DoubleType::add ( const double y)
 {
     *pointerToDoubleValue += y;
@@ -209,39 +241,6 @@ DoubleType& DoubleType::divide ( const double y)
     } 
     return *this;      
 }
-
-struct IntType
-{
-private:
-    int* pointerToIntValue = nullptr;
-    void powInternal( int );
-
-public:
-    IntType( int intIn )
-    {
-        pointerToIntValue = new int ( intIn );
-    }
-    ~IntType()
-    {
-        delete pointerToIntValue;
-        pointerToIntValue = nullptr;
-    }
-
-    IntType& add ( int );
-    IntType& subtract ( int );
-    IntType& multiply ( int );
-    IntType& divide ( int );
-
-    const IntType& pow ( int );
-    const IntType& pow ( float f_ )  { return pow(static_cast<int>(f_)); }
-    const IntType& pow ( double d_ ) { return pow(static_cast<int>(d_)); }
-    const IntType& pow (  FloatType& );
-    const IntType& pow (  DoubleType& );
-    const IntType& pow (  IntType& );
-
-    operator int() const { return *pointerToIntValue; } 
-};
-
 
 IntType& IntType::add ( const int y )
 {
@@ -275,100 +274,92 @@ IntType& IntType::divide ( const int y )
 }
 
 // Pow Implementations
-const FloatType& FloatType::pow ( float x )
+FloatType& FloatType::pow ( float x )
 {
     powInternal( x );
     return *this;
 }
 
-const FloatType& FloatType::pow ( FloatType& ft ) 
-{
-    powInternal( static_cast<float>(ft) );
-    return *this;
+FloatType& FloatType::pow ( const FloatType& ft ) 
+{  
+    return powInternal( static_cast<float>(ft) );
 }
 
-const FloatType& FloatType::pow ( IntType& it ) 
+FloatType& FloatType::pow ( const DoubleType& dt ) 
 {
-    powInternal( static_cast<float>(it) );
-    return *this;
+    return powInternal( static_cast<float>(dt) );
 }
 
-const FloatType& FloatType::pow ( DoubleType& dt ) 
+FloatType& FloatType::pow ( const IntType& it ) 
 {
-    powInternal( static_cast<float>(dt) );
-    return *this;
+    return powInternal( static_cast<float>(it) );
 }
 
-const DoubleType& DoubleType::pow ( double x )
+DoubleType& DoubleType::pow ( const double x )
 {
-    powInternal( x );
-    return *this;
+    return powInternal( x );;
 }
 
-const DoubleType& DoubleType::pow ( DoubleType& dt )
+DoubleType& DoubleType::pow ( const DoubleType& dt )
 {
-    powInternal( static_cast<double>(dt) );
-    return *this;
+    return powInternal( static_cast<double>(dt) );;
 }
 
-const DoubleType& DoubleType::pow ( FloatType& ft )
+DoubleType& DoubleType::pow ( const FloatType& ft )
 {
-    powInternal( static_cast<double>(ft) );
-    return *this;
+    return powInternal( static_cast<double>(ft) );
 }
 
-const DoubleType& DoubleType::pow ( IntType& it )
+DoubleType& DoubleType::pow ( const IntType& it )
 {
-    powInternal( static_cast<double>(it) );
-    return *this;
+    return  powInternal( static_cast<double>(it) );
 }
 
-const IntType& IntType::pow ( int x )
+IntType& IntType::pow ( const int x )
 {
-    powInternal( x );
-    return *this;
+    return powInternal( x );
 }
 
-const IntType& IntType::pow ( IntType& it ) 
+IntType& IntType::pow ( const IntType& it ) 
 {
-    powInternal( static_cast<int>(it) );
-    return *this;
+    return powInternal( static_cast<int>(it) );;
 }
 
-const IntType& IntType::pow ( FloatType& ft ) 
+IntType& IntType::pow (const FloatType& ft ) 
 {
-    powInternal( static_cast<int>(ft) );
-    return *this;
+    return powInternal( static_cast<int>(ft) );;
 }
 
-const IntType& IntType::pow ( DoubleType& dt ) 
-{
-    powInternal( static_cast<int>(dt) );
-    return *this;
+IntType& IntType::pow (const DoubleType& dt ) 
+{   
+    return powInternal( static_cast<int>(dt) );;
 }
 
-void FloatType::powInternal( float y )
+FloatType& FloatType::powInternal( float y )
 { 
     if (pointerToFloatValue != nullptr)
     {
         *pointerToFloatValue = std::pow( *pointerToFloatValue , y ); 
     }
+    return *this;
 }
 
-void IntType::powInternal( int y )
+IntType& IntType::powInternal( int y )
 { 
     if (pointerToIntValue != nullptr)
     {
         *pointerToIntValue = static_cast<int>( std::pow( *pointerToIntValue , y ));
     }
+    return *this;
 }
 
-void DoubleType::powInternal( double y ) 
+DoubleType& DoubleType::powInternal( double y ) 
 { 
     if (pointerToDoubleValue != nullptr)
     {
         *pointerToDoubleValue = static_cast<double>( std::pow( *pointerToDoubleValue , y ));
     }
+    return *this;
 }
 
 // Point UDT forwarding constructors
@@ -466,7 +457,7 @@ int main()
     std::cout << "IntType divide result=" << it.divide(4) << std::endl << std::endl;
 
     //my example of a rounding loss causing an int divide by zero in the chain
-    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(2).subtract(10).add(100) ) << div << std::endl;
+    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(2).subtract(10).add(100).pow(2) ) << div << std::endl;
 
     // some Point calculations
     std::cout << "\x1B[36m Point " << p1.toString() << " multiplication with FloatType > Point \x1B[0m" << (p1.multiply( ft )).toString() << std::endl;
