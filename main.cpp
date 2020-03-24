@@ -276,8 +276,7 @@ IntType& IntType::divide ( const int y )
 // Pow Implementations
 FloatType& FloatType::pow ( float x )
 {
-    powInternal( x );
-    return *this;
+    return powInternal( x );
 }
 
 FloatType& FloatType::pow ( const FloatType& ft ) 
