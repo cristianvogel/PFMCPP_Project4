@@ -27,31 +27,8 @@ Do not delete your previous main.
          add some in and fix the build errors that might result via the techniques you have learned in the previous weeks (hint: casting)
          i.e.
  */
-#if false
-namespace Example
-{
-    int main()
-    {
-        FloatType floatNum(4.3f);
-        IntType intNum(2);
-        IntType intNum2(6);
 
-        /* 
-        if you previously had a line like this demonstrating chaining:
-            
-            intNum.add(3).add(4.5f).divide(floatNum); 
 
-        it should become:
-        */
-        intNum += 3;
-        intNum += 4.5f;
-        intNum /= floatNum;
-        std::cout << "intNum: " << intNum << std::endl;
-        
-        return 0;
-    }
-}
-#endif
  /*
  6) compile/link/run to make sure you don't have any errors
  
@@ -64,9 +41,6 @@ send me a DM to check your pull request
  Wait for my code review.
  */
 
-
-
- 
 #include <cmath> 
 #include <iostream> 
 #include <string>
@@ -83,10 +57,16 @@ struct Point
     Point( const DoubleType& );
     Point( const IntType& );
 
-    Point& multiply(float);
     Point& multiply(const FloatType& m);
     Point& multiply(const DoubleType& m);
     Point& multiply(const IntType& m);
+
+    Point& operator*=(float m)
+    {   
+        x *= m;
+        y *= m;
+        return *this;
+    }
 
     std::string toString() 
     { 
@@ -116,10 +96,33 @@ public:
         pointerToFloatValue = nullptr;
     }
    
-    FloatType& add ( float );
-    FloatType& subtract ( float );
-    FloatType& multiply ( float );
-    FloatType& divide ( float );
+    FloatType& operator +=(  const float x )
+    {
+        *pointerToFloatValue += x;
+        return  *this;
+    }
+
+    FloatType& operator -=(  const float x )
+    {
+        *pointerToFloatValue -= x;
+        return  *this;
+    }
+
+    FloatType& operator *=(  const float x )
+    {
+        *pointerToFloatValue -= x;
+        return  *this;
+    }
+
+    FloatType& operator /=(  const float x )
+    {
+    *pointerToFloatValue /= x;
+    if (std::abs(x) <= 1e-32f ) //smallest 32-bit non-zero number
+    {
+        std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
+    }   
+    return *this;      
+    }
 
     FloatType& pow ( const float );
     FloatType& pow ( const double d_ ) { return pow(static_cast<float>(d_)); }
@@ -148,10 +151,36 @@ public:
         pointerToIntValue = nullptr;
     }
 
-    IntType& add ( int );
-    IntType& subtract ( int );
-    IntType& multiply ( int );
-    IntType& divide ( int );
+    IntType& operator += ( const int y )
+    {
+        *pointerToIntValue += y;
+        return *this;
+    }
+
+    IntType& operator -= ( const int y ) 
+    { 
+        *pointerToIntValue -= y;
+        return *this;
+    }
+
+    IntType& operator *= ( const int y ) 
+    { 
+        *pointerToIntValue *= y;
+        return *this; 
+    }
+
+    IntType& operator /= ( const int y ) 
+    { 
+        if (y != 0 ) 
+        {
+            *pointerToIntValue /=y; 
+        } 
+        else 
+        {
+            std::cout << "\x1B[31m Cannot divide Int by Zero! \x1B[0m" << std::endl;
+        }
+        return *this;
+    }
 
     IntType& pow ( const int );
     IntType& pow ( const float f_ )  { return pow(static_cast<int>(f_)); }
@@ -181,10 +210,33 @@ public:
         pointerToDoubleValue = nullptr;
     }
 
-    DoubleType& add ( double );
-    DoubleType& subtract ( double );
-    DoubleType& multiply ( double );
-    DoubleType& divide ( double );
+    DoubleType& operator += ( const double y)
+    {
+        *pointerToDoubleValue += y;
+        return *this;
+    }
+
+    DoubleType& operator -= ( const double y) 
+    { 
+        *pointerToDoubleValue -= y;
+        return *this; 
+    }
+
+    DoubleType& operator *= ( const double y) 
+    { 
+        *pointerToDoubleValue *= y;
+        return *this; 
+    }
+
+    DoubleType& operator /= ( const double y) 
+    { 
+        *pointerToDoubleValue /= y; 
+        if (std::abs(y) <= 1e-32) //smallest 32-bit non-zero number
+        { 
+            std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl;
+        } 
+        return *this;      
+    }
 
     DoubleType& pow ( const double );
     DoubleType& pow ( const float f_ ) { return pow(static_cast<double>(f_)); }
@@ -196,94 +248,6 @@ public:
     operator double() const { return *pointerToDoubleValue; } 
 
 };
-
-//out of line implementations
-FloatType& FloatType::add ( float x )
-{
-    *pointerToFloatValue += x;
-    return *this;
-}
-
-FloatType& FloatType::subtract ( const float y ) 
-{ 
-    *pointerToFloatValue -= y;
-    return *this; 
-}
-
-FloatType& FloatType::multiply ( const float y) 
-{ 
-    *pointerToFloatValue *= y;
-    return *this; 
-}
-
-FloatType& FloatType::divide ( const float y ) 
-{ 
-    *pointerToFloatValue /= y;
-    if (std::abs(y) <= 1e-32f ) //smallest 32-bit non-zero number
-    {
-        std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
-    }   
-    return *this;      
-}
-
-DoubleType& DoubleType::add ( const double y)
-{
-    *pointerToDoubleValue += y;
-    return *this;
-}
-
-DoubleType& DoubleType::subtract ( const double y) 
-{ 
-    *pointerToDoubleValue -= y;
-    return *this; 
-}
-
-DoubleType& DoubleType::multiply ( const double y) 
-{ 
-    *pointerToDoubleValue *= y;
-    return *this; 
-}
-
-DoubleType& DoubleType::divide ( const double y) 
-{ 
-    *pointerToDoubleValue /= y; 
-    if (std::abs(y) <= 1e-32) //smallest 32-bit non-zero number
-    { 
-        std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl;
-    } 
-    return *this;      
-}
-
-IntType& IntType::add ( const int y )
-{
-    *pointerToIntValue += y;
-    return *this;
-}
-
-IntType& IntType::subtract ( const int y ) 
-{ 
-    *pointerToIntValue -= y;
-    return *this;
-}
-
-IntType& IntType::multiply ( const int y ) 
-{ 
-    *pointerToIntValue *= y;
-    return *this; 
-}
-
-IntType& IntType::divide ( const int y ) 
-{ 
-    if (y != 0 ) 
-    {
-        *pointerToIntValue /=y; 
-    } 
-    else 
-    {
-        std::cout << "\x1B[31m Cannot divide Int by Zero! \x1B[0m" << std::endl;
-    }
-    return *this;
-}
 
 // Pow Implementations
 FloatType& FloatType::pow ( float x )
@@ -308,12 +272,12 @@ FloatType& FloatType::pow ( const IntType& it )
 
 DoubleType& DoubleType::pow ( const double x )
 {
-    return powInternal( x );;
+    return powInternal( x );
 }
 
 DoubleType& DoubleType::pow ( const DoubleType& dt )
 {
-    return powInternal( static_cast<double>(dt) );;
+    return powInternal( static_cast<double>(dt) );
 }
 
 DoubleType& DoubleType::pow ( const FloatType& ft )
@@ -333,17 +297,17 @@ IntType& IntType::pow ( const int x )
 
 IntType& IntType::pow ( const IntType& it ) 
 {
-    return powInternal( static_cast<int>(it) );;
+    return powInternal( static_cast<int>(it) );
 }
 
 IntType& IntType::pow (const FloatType& ft ) 
 {
-    return powInternal( static_cast<int>(ft) );;
+    return powInternal( static_cast<int>(ft) );
 }
 
 IntType& IntType::pow (const DoubleType& dt ) 
 {   
-    return powInternal( static_cast<int>(dt) );;
+    return powInternal( static_cast<int>(dt) );
 }
 
 FloatType& FloatType::powInternal( float y )
@@ -388,26 +352,22 @@ Point::Point( const IntType& it) : Point(static_cast<float>(it), static_cast<flo
 
 // Point Implementations 
 
-Point& Point::multiply(float m)
-{
-    x *= m;
-    y *= m;
-    return *this;
-}
-
 Point& Point::multiply( const FloatType& m) 
 {
-    return multiply(static_cast<float>(m));
+    *this *= static_cast<float>(m);
+    return *this;
 }
 
 Point& Point::multiply( const DoubleType& m)
 {
-    return multiply(static_cast<float>(m));
+    *this *= static_cast<float>(m);
+    return *this;
 }
 
 Point& Point::multiply( const IntType& m) 
 {
-    return multiply(static_cast<float>(m));
+    *this *= static_cast<float>(m);
+    return *this;
 }
 
 #include <iostream>
@@ -429,7 +389,8 @@ int main()
     Point p1 (2.0f, 20.0f);
     Point p2 (25.0f, 50.0f);
     
-    std::cout << "FloatType divide by zero test =" <<  ftErrorTest.divide( 0.0f) << div << std::endl;
+    ftErrorTest /= 0.0f;
+    std::cout << "FloatType divide by zero test =" << div << std::endl;
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( 2 ) << std::endl; 
     std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( 0.5 ) << std::endl; 
@@ -437,38 +398,56 @@ int main()
     std::cout << "FloatType pow (IntType with value of " << it << " ) = " << ft.pow ( it ) << std::endl;
     std::cout << "FloatType pow ( FloatType with value of " << ft << " ) = " << ft.pow( ft ) << std::endl; 
 
-    std::cout << "FloatType add result=" <<  ft.add( 2 )  << std::endl;
-    std::cout << "FloatType subtract result=" << ft.subtract( 2.0f )  << std::endl;
-    std::cout << "FloatType multiply result=" << ft.multiply( 2.0f ) << std::endl;
-    std::cout << "FloatType divide result =" <<  ft.divide( 8.0f) << div << std::endl;
+    ft+=2.0f;
+    std::cout << "FloatType add result=" << ft << std::endl;
+    ft-=2.0f;
+    std::cout << "FloatType subtract result="  << std::endl;
+    ft*=2.0f;
+    std::cout << "FloatType multiply result=" << std::endl;
+    ft/=8.0f;
+    std::cout << "FloatType divide result =" << div << std::endl;
 
-    std::cout << "DoubleType divide by zero test =" <<  dtErrorTest.divide( 0 ) << div << std::endl;
+    dtErrorTest /= 0;
+    std::cout << "DoubleType divide by zero test =" << dtErrorTest << div << std::endl;
     std::cout << "DoubleType pow ( 2.5 ) = " << dt.pow( 2.5 ) << std::endl; 
     std::cout << "DoubleType pow ( 2 ) = " << dt.pow( 2 ) << std::endl; 
     std::cout << "DoubleType pow ( 0.5f ) = " << dt.pow(0.5 ) << std::endl; 
-    std::cout << "DoubleType pow ( FloatType with value of " << ft << ") /1000 = " << dt.pow( ft.divide(1000) ) << std::endl; 
+    ft /=1000;
+    std::cout << "DoubleType pow ( FloatType with value of " << ft << ") /1000 = " << dt.pow( ft ) << std::endl; 
     std::cout << "DoubleType pow (IntType with value of " << it << " ) = " << dt.pow ( it ) << std::endl;
     std::cout << "DoubleType pow ( DoubleType with value of " << dt << " ) = " << dt.pow( dt ) << std::endl; 
+    dt+=2;
+    std::cout << "DoubleType add result=" << dt << std::endl;
+    dt-=2;
+    std::cout << "DoubleType subtract result=" << dt << std::endl;
+    dt*=2.5;
+    std::cout << "DoubleType multiply result=" << dt << std::endl;
+    
+    std::cout << "DoubleType divide result=" << dt << div << std::endl;
 
-    std::cout << "DoubleType add result=" << dt.add(2.0) << std::endl;
-    std::cout << "DoubleType subtract result=" << dt.subtract(2.0) << std::endl;
-    std::cout << "DoubleType multiply result=" << dt.multiply(2.5) << std::endl;
-    std::cout << "DoubleType divide result=" << dt.divide(16) << div << std::endl;
-
-    std::cout << "IntType divide by zero test =" <<  itErrorTest.divide( 0 ) << div << std::endl;
+    itErrorTest /= 0;
+    std::cout << "IntType divide by zero test =" <<  itErrorTest << div << std::endl;
     std::cout << "IntType pow ( 2.5 ) = " << it.pow( 2.5 ) << std::endl; 
     std::cout << "IntType pow ( 2 ) = " << it.pow(2) << std::endl; 
     std::cout << "IntType pow ( 4.0f ) = " << it.pow( 2.0f ) << std::endl; 
     std::cout << "IntType pow ( FloatType with value of " << ft << ") = " << it.pow( ft ) << std::endl; 
     std::cout << "IntType pow (DoubleType with value of " << dt << " ) = " << it.pow ( dt ) << std::endl;
     std::cout << "IntType pow ( IntType with value of " << it << " ) = " << it.pow( it ) << std::endl; 
-    std::cout << "IntType add result=" << it.add(8) << std::endl;
-    std::cout << "IntType subtract result=" << it.subtract(2) << std::endl;
-    std::cout << "IntType multiply result=" << it.multiply(2) << std::endl;
-    std::cout << "IntType divide result=" << it.divide(4) << std::endl << std::endl;
+    it+=8;
+    std::cout << "IntType add result=" << it << std::endl;
+    it-=2;
+    std::cout << "IntType subtract result=" << it << std::endl;
+    it*=2;
+    std::cout << "IntType multiply result=" << it << std::endl;
+    it/=4;
+    std::cout << "IntType divide result=" << it << std::endl << std::endl;
 
     //my example of a rounding loss causing an int divide by zero in the chain
-    std::cout << "\x1B[32m Chain calculation = " << ( it.multiply(1000).divide(2).subtract(10).add(100).pow(2) ) << div << std::endl;
+    it *= 1000;
+    it /= 2;
+    it -= 10;
+    it += 100;
+    std::cout << "\x1B[32m Chain calculation = " << it.pow(2) << div << std::endl;
 
     // some Point calculations
     std::cout << "\x1B[36m Point " << p1.toString() << " multiplication with FloatType > Point \x1B[0m" << (p1.multiply( ft )).toString() << std::endl;
