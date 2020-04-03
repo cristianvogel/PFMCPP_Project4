@@ -61,13 +61,6 @@ struct Point
     Point& multiply(const DoubleType& m);
     Point& multiply(const IntType& m);
 
-    Point& operator*=(float m)
-    {   
-        x *= m;
-        y *= m;
-        return *this;
-    }
-
     std::string toString() 
     { 
         std::string result = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
@@ -96,32 +89,32 @@ public:
         pointerToFloatValue = nullptr;
     }
    
-    FloatType& operator +=(  const float x )
+    FloatType& operator+= ( const float x )
     {
         *pointerToFloatValue += x;
         return  *this;
     }
 
-    FloatType& operator -=(  const float x )
+    FloatType& operator-= ( const float x )
     {
         *pointerToFloatValue -= x;
         return  *this;
     }
 
-    FloatType& operator *=(  const float x )
+    FloatType& operator*= ( const float x )
     {
         *pointerToFloatValue -= x;
         return  *this;
     }
 
-    FloatType& operator /=(  const float x )
+    FloatType& operator/= ( const float x )
     {
-    *pointerToFloatValue /= x;
-    if (std::abs(x) <= 1e-32f ) //smallest 32-bit non-zero number
-    {
-        std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
-    }   
-    return *this;      
+        *pointerToFloatValue /= x;
+        if (std::abs(x) <= 1e-32f ) //smallest 32-bit non-zero number
+        {
+            std::cout <<    "\x1B[31m Divide-by-zero warning! \x1B[0m" << std::endl; 
+        }   
+        return *this;      
     }
 
     FloatType& pow ( const float );
@@ -151,25 +144,25 @@ public:
         pointerToIntValue = nullptr;
     }
 
-    IntType& operator += ( const int y )
+    IntType& operator+= ( const int y )
     {
         *pointerToIntValue += y;
         return *this;
     }
 
-    IntType& operator -= ( const int y ) 
+    IntType& operator-= ( const int y ) 
     { 
         *pointerToIntValue -= y;
         return *this;
     }
 
-    IntType& operator *= ( const int y ) 
+    IntType& operator*= ( const int y ) 
     { 
         *pointerToIntValue *= y;
         return *this; 
     }
 
-    IntType& operator /= ( const int y ) 
+    IntType& operator/= ( const int y ) 
     { 
         if (y != 0 ) 
         {
@@ -210,25 +203,25 @@ public:
         pointerToDoubleValue = nullptr;
     }
 
-    DoubleType& operator += ( const double y)
+    DoubleType& operator+= ( const double y)
     {
         *pointerToDoubleValue += y;
         return *this;
     }
 
-    DoubleType& operator -= ( const double y) 
+    DoubleType& operator-= ( const double y) 
     { 
         *pointerToDoubleValue -= y;
         return *this; 
     }
 
-    DoubleType& operator *= ( const double y) 
+    DoubleType& operator*= ( const double y) 
     { 
         *pointerToDoubleValue *= y;
         return *this; 
     }
 
-    DoubleType& operator /= ( const double y) 
+    DoubleType& operator/= ( const double y) 
     { 
         *pointerToDoubleValue /= y; 
         if (std::abs(y) <= 1e-32) //smallest 32-bit non-zero number
@@ -354,19 +347,22 @@ Point::Point( const IntType& it) : Point(static_cast<float>(it), static_cast<flo
 
 Point& Point::multiply( const FloatType& m) 
 {
-    *this *= static_cast<float>(m);
+    x *= m;
+    y *= m;
     return *this;
 }
 
 Point& Point::multiply( const DoubleType& m)
 {
-    *this *= static_cast<float>(m);
+    x *= static_cast<float>(m);
+    y *= static_cast<float>(m);
     return *this;
 }
 
 Point& Point::multiply( const IntType& m) 
 {
-    *this *= static_cast<float>(m);
+    x *= static_cast<float>(m);
+    y *= static_cast<float>(m);
     return *this;
 }
 
@@ -390,7 +386,7 @@ int main()
     Point p2 (25.0f, 50.0f);
     
     ftErrorTest /= 0.0f;
-    std::cout << "FloatType divide by zero test =" << div << std::endl;
+    std::cout << "FloatType divide by zero test =" << ftErrorTest << div << std::endl;
     std::cout << "FloatType pow ( 2.0f ) = " << ft.pow( 2.0f ) << std::endl; 
     std::cout << "FloatType pow ( 2 ) = " << ft.pow( 2 ) << std::endl; 
     std::cout << "FloatType pow ( 0.5 ) = " << ft.pow( 0.5 ) << std::endl; 
@@ -401,11 +397,11 @@ int main()
     ft+=2.0f;
     std::cout << "FloatType add result=" << ft << std::endl;
     ft-=2.0f;
-    std::cout << "FloatType subtract result="  << std::endl;
+    std::cout << "FloatType subtract result=" << ft  << std::endl;
     ft*=2.0f;
-    std::cout << "FloatType multiply result=" << std::endl;
+    std::cout << "FloatType multiply result=" << ft << std::endl;
     ft/=8.0f;
-    std::cout << "FloatType divide result =" << div << std::endl;
+    std::cout << "FloatType divide result =" <<  ft << div << std::endl;
 
     dtErrorTest /= 0;
     std::cout << "DoubleType divide by zero test =" << dtErrorTest << div << std::endl;
