@@ -57,6 +57,7 @@ struct Point
     Point( const DoubleType& );
     Point( const IntType& );
 
+    Point& multiply( float );
     Point& multiply(const FloatType& m);
     Point& multiply(const DoubleType& m);
     Point& multiply(const IntType& m);
@@ -344,26 +345,26 @@ Point::Point( const IntType& it) : Point(static_cast<float>(it), static_cast<flo
 }
 
 // Point Implementations 
-
-Point& Point::multiply( const FloatType& m) 
+Point& Point::multiply( float m )
 {
     x *= m;
     y *= m;
     return *this;
 }
 
+Point& Point::multiply( const FloatType& m) 
+{
+    return multiply(static_cast<float>(m));
+}
+
 Point& Point::multiply( const DoubleType& m)
 {
-    x *= static_cast<float>(m);
-    y *= static_cast<float>(m);
-    return *this;
+    return multiply(static_cast<float>(m));
 }
 
 Point& Point::multiply( const IntType& m) 
 {
-    x *= static_cast<float>(m);
-    y *= static_cast<float>(m);
-    return *this;
+    return multiply(static_cast<float>(m));
 }
 
 #include <iostream>
